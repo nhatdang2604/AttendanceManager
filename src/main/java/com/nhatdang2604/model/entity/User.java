@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
-
+	
 	/**
 	 * 
 	 */
@@ -33,16 +33,20 @@ public class User implements Serializable {
 	@Column(name = "role")
 	private String role;
 	
+	@Column(name = "active")
+	private Boolean isActive;
+	
 	//Constructors
 	public User() {
 		//do nothing
 	}
 
-	public User(Integer id, String username, String encryptedPassword, String role) {
+	public User(Integer id, String username, String encryptedPassword, String role, Boolean isActive) {
 		this.id = id;
 		this.username = username;
 		this.encryptedPassword = encryptedPassword;
 		this.role = role;
+		this.isActive = isActive;
 	}
 
 	//Getters
@@ -50,12 +54,14 @@ public class User implements Serializable {
 	public String getUsername() {return username;}
 	public String getEncryptedPassword() {return encryptedPassword;}
 	public String getRole() {return role;}
-
+	public Boolean getIsActive() {return isActive;}
+	
 	//Setters
 	public void setId(Integer id) {this.id = id;}
 	public void setUsername(String username) {this.username = username;}	
 	public void setEncryptedPassword(String encryptedPassword) {this.encryptedPassword = encryptedPassword;}
 	public void setRole(String role) {this.role = role;}
+	public void setIsActive(Boolean isActive) {this.isActive = isActive;}
 	
 	
 	
