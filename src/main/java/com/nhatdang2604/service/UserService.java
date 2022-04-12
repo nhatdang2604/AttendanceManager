@@ -1,5 +1,6 @@
 package com.nhatdang2604.service;
 
+import com.nhatdang2604.dao.IUserDAO;
 import com.nhatdang2604.dao.UserDAO;
 import com.nhatdang2604.model.crm.CRMUser;
 import com.nhatdang2604.model.entity.User;
@@ -9,7 +10,7 @@ public enum UserService implements IUserService {
 
 	INSTANCE;
 	
-	private UserDAO userDAO;
+	private IUserDAO userDAO;
 	
 	private UserService() {
 		
@@ -42,6 +43,13 @@ public enum UserService implements IUserService {
 		user = (isTheSameUser(crmUser, user)?user:null);
 		
 		return user;
+	}
+
+	public User changePassword(User currentUser, String newPassword) {
+		
+		currentUser.setEncryptedPassword(HashingUtil.passwordEncryption(newPassword));
+		
+		return userDAO.createOrUpdateUser(currentUser);
 	}
 
 }

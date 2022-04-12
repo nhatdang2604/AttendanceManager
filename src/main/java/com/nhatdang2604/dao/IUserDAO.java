@@ -9,4 +9,10 @@ public interface IUserDAO {
 	//Return the User of the crmUser in the database
 	//If the user is existed, return the user, else return null
 	public User getUserByCRMUser(CRMUser crmUser);
+	
+	public User getUserById(Integer id);
+	
+	public User createOrUpdateUser(User user);
+	
+	public int deleteUser(Integer id);
 }

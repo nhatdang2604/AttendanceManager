@@ -8,4 +8,6 @@ public interface IUserService {
 	public boolean isTheSameUser(CRMUser crmUser, User user);
 	
 	public User authenticated(CRMUser crmUser);
+	
+	public User changePassword(User currentUser, String newPassword);
 }
