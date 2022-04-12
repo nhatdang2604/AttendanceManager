@@ -22,37 +22,38 @@ public enum UserDAO implements IUserDAO {
 		//Inject the session factory from hibernate utility
 		factory = HibernateUtil.INSTANCE.getSessionFactory();
 	}
-	
-	//Helper to compare a CRMUser and User
-	private boolean isTheSameUser(CRMUser crmUser, User user) {
-		
-		//Compare the username
-		boolean isTheSameUsername = user.getUsername().equals(crmUser.getUsername());
-		
-		//Return false if the username is different
-		if (!isTheSameUsername) return false;
-		
-		//Compare the password hashing
-		boolean isTheSamePassword = user.getEncryptedPassword().equals(				//compare the user password with the
-				HashingUtil.passwordEncryption(crmUser.getUnencryptedPassword()));	//hashing of the crmUser password
-		
-		return isTheSamePassword;
-	}
-	
-	//Return true if the crmUser is login successfully, else return false
-	public boolean doesLoginSuccessfully(CRMUser crmUser) {
-		
-		//Get the current session from hibernate
-		Session session = factory.getCurrentSession();
-		
-		return false;
-	}
 
 	//Return the User of the crmUser in the database
 	//If the user is existed, return the user, else return null
-	public User authenticated(CRMUser crmUser) {
+	public User getUserByCRMUser(CRMUser crmUser) {
 
-		return null;
+		Session session = factory.getCurrentSession();
+		
+		User user = null;
+		
+		try {
+			session.beginTransaction();
+			
+			//Parameterize the query
+			String param = "username";
+			
+			//Make the query
+			String query = "from " + User.class.getName() + " u where u.username = :" + param;
+			
+			user = (User) session.createQuery(query)
+					.setParameter(param, crmUser.getUsername())
+					.getSingleResult();
+
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.getTransaction().commit();
+		}
+		
+		
+		return user;
 	}
 	
 }

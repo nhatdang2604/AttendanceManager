@@ -13,6 +13,11 @@ import javax.persistence.Table;
 @Table(name = "user")
 public class User implements Serializable {
 	
+	public enum USER_ROLE {
+		Role_Student,
+		Role_Ministry
+	}
+	
 	/**
 	 * 
 	 */
