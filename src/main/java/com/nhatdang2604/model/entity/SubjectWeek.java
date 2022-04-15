@@ -7,11 +7,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -23,22 +21,23 @@ public class SubjectWeek implements Serializable {
 	 */
 	private static final long serialVersionUID = -7602067339960852568L;
 
-	//Attributes
+	public static final int NUMBER_OF_WEEKS_PER_COURSE = 15;
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
-	
-	@OneToOne(
-			cascade = CascadeType.ALL,
+	//Attributes	
+	@ManyToOne(
+			cascade = {
+					CascadeType.DETACH,
+					CascadeType.MERGE,
+					CascadeType.PERSIST,
+					CascadeType.REFRESH},
 			fetch = FetchType.LAZY)
-	@JoinColumn(
+	@PrimaryKeyJoinColumn(
 			name = "schedule_id", 
 			referencedColumnName = "id")
 	private Schedule schedule;
 	
-	@Column(name = "week")
+	@Id
+	@Column(name = "week_index")
 	private Integer weekIndex;	//From 1 - 15 weeks
 	
 	@Column(name = "date")
@@ -52,14 +51,6 @@ public class SubjectWeek implements Serializable {
 		this.schedule = schedule;
 		this.weekIndex = weekIndex;
 		this.date = date;
-	}
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
 	}
 
 	public Schedule getSchedule() {

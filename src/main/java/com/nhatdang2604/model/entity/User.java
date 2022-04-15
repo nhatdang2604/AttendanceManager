@@ -46,8 +46,7 @@ public class User implements Serializable {
 		//do nothing
 	}
 
-	public User(Integer id, String username, String encryptedPassword, String role, Boolean isActive) {
-		this.id = id;
+	public User(String username, String encryptedPassword, String role, Boolean isActive) {
 		this.username = username;
 		this.encryptedPassword = encryptedPassword;
 		this.role = role;

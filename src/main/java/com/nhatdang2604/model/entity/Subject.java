@@ -21,7 +21,7 @@ public class Subject implements Serializable {
 	@Id
 	//@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Integer id;
+	private String id;
 	
 	@Column(name = "name")
 	private String name;
@@ -35,11 +35,11 @@ public class Subject implements Serializable {
 		this.name = name;
 	}
 	//Getters
-	public Integer getId() {return id;}
+	public String getId() {return id;}
 	public String getName() {return name;}
 
 	//Setters
 	public void setName(String name) {this.name = name;}
-	public void setId(Integer id) {this.id = id;}
+	public void setId(String id) {this.id = id;}
 	
 }

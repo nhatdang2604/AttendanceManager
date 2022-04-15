@@ -3,16 +3,17 @@ package com.nhatdang2604.model.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -28,18 +29,20 @@ public class Schedule implements Serializable {
 		Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 	}
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Integer id;
-	
 	@OneToOne(
-			cascade = CascadeType.ALL,
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE,
+					CascadeType.DETACH,
+					CascadeType.REFRESH},
 			fetch = FetchType.LAZY)
-	@JoinColumn(
-			name = "subject_id", 
+	@PrimaryKeyJoinColumn(
+			name = "id", 
 			referencedColumnName = "id")
-	private Subject subject;
+	private Course course;
+	
+	@OneToMany(mappedBy = "schedule_id")
+	private List<SubjectWeek> subjectWeeks;
 	
 	@Column(name = "start_date")
 	private Date startDate;
@@ -53,28 +56,27 @@ public class Schedule implements Serializable {
 	@Column(name = "week_day")
 	private String weekDay;
 
-	public Schedule(Subject subject, Date startDate, Date endDate, Time time, String weekDay) {
-		this.subject = subject;
+	public Schedule() {
+		//do nothing
+	}
+	
+	
+	public Schedule(Course course, List<SubjectWeek> subjectWeeks, Date startDate, Date endDate, Time time,
+			String weekDay) {
+		this.course = course;
+		this.subjectWeeks = subjectWeeks;
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.time = time;
 		this.weekDay = weekDay;
 	}
 
-	public Integer getId() {
-		return id;
+	public Course getCourse() {
+		return course;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Subject getSubject() {
-		return subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 	public Date getStartDate() {
@@ -107,6 +109,14 @@ public class Schedule implements Serializable {
 
 	public void setWeekDay(String weekDay) {
 		this.weekDay = weekDay;
+	}
+
+	public List<SubjectWeek> getSubjectWeeks() {
+		return subjectWeeks;
+	}
+
+	public void setSubjectWeeks(List<SubjectWeek> subjectWeeks) {
+		this.subjectWeeks = subjectWeeks;
 	}
 	
 	

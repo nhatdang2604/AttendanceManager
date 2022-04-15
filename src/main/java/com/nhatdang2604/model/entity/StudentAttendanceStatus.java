@@ -6,8 +6,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.PrimaryKeyJoinColumns;
 import javax.persistence.Table;
 
 @Entity
@@ -23,8 +25,12 @@ public class StudentAttendanceStatus implements Serializable {
 		Present, Absent
 	}
 	
-	@OneToOne(
-			cascade = CascadeType.ALL,
+	@ManyToOne(
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE,
+					CascadeType.DETACH,
+					CascadeType.REFRESH},
 			fetch = FetchType.LAZY)
 	@PrimaryKeyJoinColumn(
 			name = "student_id", 
@@ -34,9 +40,9 @@ public class StudentAttendanceStatus implements Serializable {
 	@OneToOne(
 			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY)
-	@PrimaryKeyJoinColumn(
-			name = "subject_week_id", 
-			referencedColumnName = "id")
+	@PrimaryKeyJoinColumns({
+		@PrimaryKeyJoinColumn(name = "schedule_id", referencedColumnName = "schedule_id"),
+		@PrimaryKeyJoinColumn(name = "week_index", referencedColumnName = "week_index")})
 	private SubjectWeek subjectWeek;
 	
 	@Column(name = "attendance_status")
