@@ -52,4 +52,20 @@ public enum UserService implements IUserService {
 		return userDAO.createOrUpdateUser(currentUser);
 	}
 
+	@Override
+	public User createOrUpdateUser(User user) {
+		return userDAO.createOrUpdateUser(user);
+	}
+
+	@Override
+	public Integer deleteUser(Integer id) {
+		return userDAO.deleteUser(id);
+	}
+
+	@Override
+	public User findUserById(Integer id) {
+		return userDAO.findUserById(id);
+	}
+	
+	
 }

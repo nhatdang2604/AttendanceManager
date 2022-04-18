@@ -4,11 +4,18 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "subject")
+@Table(
+		name = "subject",
+		uniqueConstraints = {
+				@UniqueConstraint(columnNames = "course_id")
+		})
 public class Subject implements Serializable {
 
 	/**
@@ -18,10 +25,15 @@ public class Subject implements Serializable {
 
 	//Fields
 	
+	//True id
 	@Id
-	//@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private String id;
+	private Integer id;
+	
+	//Id for readablility
+	@Column(name = "course_id")
+	private String courseId;
 	
 	@Column(name = "name")
 	private String name;
@@ -34,12 +46,25 @@ public class Subject implements Serializable {
 	public Subject(String name) {
 		this.name = name;
 	}
+	
+	public Subject(String courseId, String name) {
+		this.courseId = courseId;
+		this.name = name;
+	}
+	
 	//Getters
-	public String getId() {return id;}
+	public Integer getId() {return id;}
+	public String getCourseId() {return courseId;}
 	public String getName() {return name;}
 
 	//Setters
 	public void setName(String name) {this.name = name;}
-	public void setId(String id) {this.id = id;}
+	public void setId(Integer id) {this.id = id;}
+	public void setCourseId(String courseId) {this.courseId = courseId;}
+	
+	@Override
+	public String toString() {
+		return "Subject [id=" + id + ", name=" + name + "]";
+	}
 	
 }

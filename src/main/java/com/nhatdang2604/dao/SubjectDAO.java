@@ -31,12 +31,13 @@ public enum SubjectDAO implements ISubjectDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 		
 		return subject;
 	}
 
-	public int deleteSubject(String id) {
+	public int deleteSubject(Integer id) {
 		
 		Session session = factory.getCurrentSession();
 		
@@ -55,12 +56,13 @@ public enum SubjectDAO implements ISubjectDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 	
 		return 0;
 	}
 
-	public Subject findSubjectById(String id) {
+	public Subject findSubjectById(Integer id) {
 		
 		Session session = factory.getCurrentSession();
 		Subject subject = null;
@@ -76,6 +78,7 @@ public enum SubjectDAO implements ISubjectDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 	
 		return subject;

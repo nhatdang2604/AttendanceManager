@@ -9,11 +9,11 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
+import javax.persistence.MapsId;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -29,19 +29,15 @@ public class Schedule implements Serializable {
 		Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
 	}
 	
+	
+	@Id
 	@OneToOne(
-			cascade = {
-					CascadeType.PERSIST,
-					CascadeType.MERGE,
-					CascadeType.DETACH,
-					CascadeType.REFRESH},
+			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY)
-	@PrimaryKeyJoinColumn(
-			name = "id", 
-			referencedColumnName = "id")
+	@JoinColumn(name = "id")
 	private Course course;
 	
-	@OneToMany(mappedBy = "schedule_id")
+	@OneToMany(mappedBy = "schedule")
 	private List<SubjectWeek> subjectWeeks;
 	
 	@Column(name = "start_date")
@@ -117,8 +113,44 @@ public class Schedule implements Serializable {
 
 	public void setSubjectWeeks(List<SubjectWeek> subjectWeeks) {
 		this.subjectWeeks = subjectWeeks;
+		subjectWeeks.forEach((week)->{
+			week.setSchedule(this);
+		});
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "Schedule [course=" + course + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", time=" + time + ", weekDay=" + weekDay + "]";
+	}
+
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((course == null) ? 0 : course.hashCode());
+		return result;
+	}
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Schedule other = (Schedule) obj;
+		if (course == null) {
+			if (other.course != null)
+				return false;
+		} else if (!course.equals(other.course))
+			return false;
+		return true;
+	}
+
 	
 }

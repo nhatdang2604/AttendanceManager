@@ -30,13 +30,15 @@ public enum SubjectService implements ISubjectService {
 		return (null != tryToFind? subjectDAO.createOrUpdateSubject(subject):null);
 	}
 
-	public int deleteSubject(String id) {
+	public int deleteSubject(Integer id) {
 		
+		if (null == id) {return 1;}
 		return subjectDAO.deleteSubject(id);
 	}
 
-	public Subject findSubjectById(String id) {
+	public Subject findSubjectById(Integer id) {
 		
+		if (null == id) {return null;}
 		return subjectDAO.findSubjectById(id);
 	}
 	

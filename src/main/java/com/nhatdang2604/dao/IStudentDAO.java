@@ -1,9 +1,13 @@
 package com.nhatdang2604.dao;
 
+import java.util.Collection;
+
 import com.nhatdang2604.model.entity.Student;
-import com.nhatdang2604.model.entity.User;
 
 public interface IStudentDAO {
 
-	public Student getStudentFromUser(User user);
+	public Student createOrUpdateStudent(Student student);
+	public Collection<Student> createOrUpdateStudents(Collection<Student> students);
+	public int deleteStudent(Integer id);
+	public Student findStudentById(Integer id);
 }

@@ -33,6 +33,7 @@ public enum MinistryDAO implements IMinistryDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 		
 		return ministry;

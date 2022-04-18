@@ -10,4 +10,8 @@ public interface IUserService {
 	public User authenticated(CRMUser crmUser);
 	
 	public User changePassword(User currentUser, String newPassword);
+	
+	public User createOrUpdateUser(User user);
+	public Integer deleteUser(Integer id);
+	public User findUserById(Integer id);
 }

@@ -50,13 +50,14 @@ public enum UserDAO implements IUserDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 		
 		
 		return user;
 	}
 
-	public User getUserById(Integer id) {
+	public User findUserById(Integer id) {
 		
 		Session session = factory.getCurrentSession();
 		
@@ -73,6 +74,7 @@ public enum UserDAO implements IUserDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 		
 		return user;
@@ -92,6 +94,7 @@ public enum UserDAO implements IUserDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 		
 		return user;
@@ -115,6 +118,7 @@ public enum UserDAO implements IUserDAO {
 			session.getTransaction().rollback();
 		} finally {
 			session.getTransaction().commit();
+			session.close();
 		}
 	
 		return 0;

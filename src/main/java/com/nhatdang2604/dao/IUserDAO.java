@@ -10,7 +10,7 @@ public interface IUserDAO {
 	//If the user is existed, return the user, else return null
 	public User getUserByCRMUser(CRMUser crmUser);
 	
-	public User getUserById(Integer id);
+	public User findUserById(Integer id);
 	
 	public User createOrUpdateUser(User user);
 	

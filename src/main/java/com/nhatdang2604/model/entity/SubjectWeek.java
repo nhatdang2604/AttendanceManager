@@ -8,8 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
@@ -23,7 +23,8 @@ public class SubjectWeek implements Serializable {
 
 	public static final int NUMBER_OF_WEEKS_PER_COURSE = 15;
 	
-	//Attributes	
+	//Attributes
+	@Id
 	@ManyToOne(
 			cascade = {
 					CascadeType.DETACH,
@@ -31,9 +32,7 @@ public class SubjectWeek implements Serializable {
 					CascadeType.PERSIST,
 					CascadeType.REFRESH},
 			fetch = FetchType.LAZY)
-	@PrimaryKeyJoinColumn(
-			name = "schedule_id", 
-			referencedColumnName = "id")
+	@JoinColumn(name = "schedule_id")
 	private Schedule schedule;
 	
 	@Id
@@ -76,8 +75,10 @@ public class SubjectWeek implements Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	
-	
-	
+
+	@Override
+	public String toString() {
+		return "SubjectWeek [scheduleId=" + schedule.getCourse().getId() + ", weekIndex=" + weekIndex + ", date=" + date + "]";
+	}
 	
 }

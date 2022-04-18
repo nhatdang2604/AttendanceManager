@@ -1,13 +1,16 @@
 package com.nhatdang2604.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.nhatdang2604.dao.CourseDAO;
 import com.nhatdang2604.dao.ICourseDAO;
 import com.nhatdang2604.model.entity.Course;
 import com.nhatdang2604.model.entity.Schedule;
 import com.nhatdang2604.model.entity.Student;
+import com.nhatdang2604.model.entity.StudentAttendanceStatus;
 import com.nhatdang2604.model.entity.Subject;
 import com.nhatdang2604.model.entity.SubjectWeek;
 
@@ -16,9 +19,15 @@ public enum CourseService implements ICourseService {
 	INSTANCE;
 	
 	private ICourseDAO courseDAO;
+	private IScheduleService scheduleService;
+	private IStudentService studentService;
+	private IAttendanceStatusService attendanceStatusService;
 	
 	private CourseService() {
 		courseDAO = CourseDAO.INSTANCE;
+		scheduleService = ScheduleService.INSTANCE;
+		studentService = StudentService.INSTANCE;
+		attendanceStatusService = AttendanceStatusService.INSTANCE;
 	}
 
 	public Course createCourse(Course course) {
@@ -31,19 +40,9 @@ public enum CourseService implements ICourseService {
 			course.setSchedule(schedule);
 		}
 		
-		//Add subject week if empty
-		if (null == course.getSchedule().getSubjectWeeks()) {
-			
-			List<SubjectWeek> weeks = new ArrayList<SubjectWeek>();
-			for (int weekIndex = 1; weekIndex <= SubjectWeek.NUMBER_OF_WEEKS_PER_COURSE; ++weekIndex) {
-				weeks.add(new SubjectWeek(schedule, weekIndex, null));
-			}
-			
-			course.getSchedule().setSubjectWeeks(weeks);
-			
-		}
-		
-		return courseDAO.createOrUpdateCourse(course);
+		Course result = courseDAO.createOrUpdateCourse(course);
+		scheduleService.createOrUpdateSchedule(schedule);
+		return result;
 	}
 
 	public Course updateCourse(Course course) {
@@ -51,10 +50,15 @@ public enum CourseService implements ICourseService {
 	}
 
 	public int deleteCourse(Integer id) {
+		
+		if (null == id) {return 1;}
+		
 		return courseDAO.deleteCourse(id);
 	}
 
 	public Course findCourseById(Integer id) {
+		if (null == id) {return null;}
+		
 		return courseDAO.findCourseById(id);
 	}
 
@@ -68,24 +72,41 @@ public enum CourseService implements ICourseService {
 	public Course addScheduleToCourse(Course course, Schedule schedule) {
 		
 		course.setSchedule(schedule);
+		schedule.setCourse(course);
 		
+		scheduleService.createOrUpdateSchedule(schedule);
 		return updateCourse(course);
 	}
 
-	public Course addStudentsToCourse(Course course, List<Student> students) {
+	public Course addStudentsToCourse(Course course, Set<Student> students) {
 		
-		course.setStudents(students);
+		course.add(students);
+		students.forEach(student -> {
+			student.add(course);
+		});
 		
+		studentService.createOrUpdateStudents(students);
 		return updateCourse(course);
 	}
 
 	public Course addStudentToCourse(Course course, Student student) {
 		
-		if (null == course.getStudents()) {
-			course.setStudents(new ArrayList<Student>());
-		}
+		course.add(student);
+		student.add(course);
 		
-		course.getStudents().add(student);
+		List<SubjectWeek> weeks = course.getSchedule().getSubjectWeeks();
+		
+		
+		List<StudentAttendanceStatus> statuses = weeks
+				.stream()
+				.map(week -> new StudentAttendanceStatus(
+						student, week, StudentAttendanceStatus.ATTENDANCE_STATUS.None.name()))
+				.collect(Collectors.toList());
+		
+		student.add(statuses);
+		
+		attendanceStatusService.createOrUpdateStatuses(statuses);
+		studentService.createOrUpdateStudent(student);
 		
 		return updateCourse(course);
 	}

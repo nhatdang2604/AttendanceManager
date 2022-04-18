@@ -1,7 +1,8 @@
 package com.nhatdang2604.model.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,7 +36,8 @@ public class Course implements Serializable {
 			fetch = FetchType.LAZY)
 	@JoinColumn(
 			name = "subject_id", 
-			referencedColumnName = "id")
+			referencedColumnName = "id",
+			nullable = true)
 	private Subject subject;
 	
 	@ManyToMany(
@@ -49,18 +51,23 @@ public class Course implements Serializable {
 			name = "course_student",
 			joinColumns = @JoinColumn(name = "course_id"),
 			inverseJoinColumns = @JoinColumn(name = "student_id"))
-	private List<Student> students;
+	private Set<Student> students;
 
-	@OneToOne(mappedBy = "id")
+	@OneToOne(
+			mappedBy = "course",
+			cascade = CascadeType.ALL,
+			fetch = FetchType.LAZY,
+			optional = true)
 	private Schedule schedule;
 	
 	public Course() {
 		//do nothing
 	}
 	
-	public Course(Subject subject, List<Student> students) {
+	public Course(Subject subject, Set<Student> students, Schedule schedule) {
 		this.subject = subject;
 		this.students = students;
+		this.schedule = schedule;
 	}
 
 	public Schedule getSchedule() {
@@ -69,6 +76,7 @@ public class Course implements Serializable {
 
 	public void setSchedule(Schedule schedule) {
 		this.schedule = schedule;
+		schedule.setCourse(this);
 	}
 
 	public Integer getId() {
@@ -87,14 +95,62 @@ public class Course implements Serializable {
 		this.subject = subject;
 	}
 
-	public List<Student> getStudents() {
+	public Set<Student> getStudents() {
 		return students;
 	}
 
-	public void setStudents(List<Student> students) {
+	public void setStudents(Set<Student> students) {
 		this.students = students;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Course other = (Course) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Course [id=" + id + ", subject=" + subject + ", students=" + students + "]";
+	}
 	
+	//Utitlity to add student to course
+	public Course add(Student student) {
+		
+		if (null == students) {
+			this.students = new HashSet<>();
+		}
+		
+		this.students.add(student);
+		
+		return this;
+	}
 	
+	//Utitlity to add student to course
+	public Course add(Set<Student> students) {
 	
+		this.students = students;
+			
+		return this;
+	}
+		
 }
