@@ -2,8 +2,8 @@ package com.nhatdang2604.service;
 
 import com.nhatdang2604.dao.IUserDAO;
 import com.nhatdang2604.dao.UserDAO;
-import com.nhatdang2604.model.crm.CRMUser;
 import com.nhatdang2604.model.entity.User;
+import com.nhatdang2604.model.formModel.LoginFormModel;
 import com.nhatdang2604.utility.HashingUtil;
 
 public enum UserService implements IUserService {
@@ -19,7 +19,7 @@ public enum UserService implements IUserService {
 	}
 	
 	//Helper to compare a CRMUser and User
-	public boolean isTheSameUser(CRMUser crmUser, User user) {
+	public boolean isTheSameUser(LoginFormModel crmUser, User user) {
 		
 		if (null == crmUser || null == user) return false;
 		
@@ -30,24 +30,25 @@ public enum UserService implements IUserService {
 		if (!isTheSameUsername) return false;
 			
 		//Compare the password hashing
-		boolean isTheSamePassword = user.getEncryptedPassword().equals(				//compare the user password with the
-				HashingUtil.passwordEncryption(crmUser.getUnencryptedPassword()));	//hashing of the crmUser password
+		boolean isTheSamePassword = 
+				user.getEncryptedPassword()
+				.equals(crmUser.getEncryptedPassword());
 			
 		return isTheSamePassword;
 	}
 
-	public User authenticated(CRMUser crmUser) {
+	public User authenticated(LoginFormModel crmUser) {
 		
-		User user = userDAO.getUserByCRMUser(crmUser);
+		User user = userDAO.getUserByUserLoginModel(crmUser);
 		
 		user = (isTheSameUser(crmUser, user)?user:null);
 		
 		return user;
 	}
 
-	public User changePassword(User currentUser, String newPassword) {
+	public User changePassword(User currentUser, String newEncryptedPassword) {
 		
-		currentUser.setEncryptedPassword(HashingUtil.passwordEncryption(newPassword));
+		currentUser.setEncryptedPassword(newEncryptedPassword);
 		
 		return userDAO.createOrUpdateUser(currentUser);
 	}

@@ -1,9 +1,6 @@
 package com.nhatdang2604.main;
 
-import com.nhatdang2604.model.entity.Course;
-import com.nhatdang2604.model.entity.Student;
-import com.nhatdang2604.model.entity.Subject;
-import com.nhatdang2604.model.entity.SubjectWeek;
+import com.nhatdang2604.controller.LoginController;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.service.CourseService;
 import com.nhatdang2604.service.ICourseService;
@@ -23,45 +20,45 @@ public class Main {
 		ISubjectService service1 = SubjectService.INSTANCE;
 		ICourseService service2 = CourseService.INSTANCE;
 		IStudentService service4 = StudentService.INSTANCE;
-		
-		Subject math = new Subject("MTH0004", "Đại số tuyến tính");
-		
-		Course course = new Course(math, null, null);
-		service2.createCourse(course);
-		
-		System.out.print(course.getId());
-		
-		int linearAlgebraId = 1;
-		course = service2.findCourseById(linearAlgebraId);
-		
-		System.out.println(course);
+//		
+//		Subject math = new Subject("MTH0004", "Đại số tuyến tính");
+//		
+//		Course course = new Course(math, null, null);
+//		service2.createCourse(course);
+//		
+//		System.out.print(course.getId());
+//		
+//		int linearAlgebraId = 1;
+//		course = service2.findCourseById(linearAlgebraId);
+//		
+//		System.out.println(course);
 //		System.out.println(course.getSchedule().getCourse().getId());
 		
 //		for (SubjectWeek week: course.getSchedule().getSubjectWeeks()) {
 //			System.out.println(week.getSchedule().getCourse().getId());
 //		}
 //		
-		service0.createOrUpdateUser(new User(
-				"test",
-				HashingUtil.passwordEncryption("test"),
-				User.USER_ROLE.Role_Student.name(),
-				true,
-				null));
-		
-		User user = service0.findUserById(1);
-		System.out.println("1st call user:" + user);
-		Student quan = service4.createOrUpdateStudent(new Student(user, "Hoang Quan", "Tran", null, null));
-		//user.setUserInformation(quan);
-		
-		user = service0.findUserById(1);
-		System.out.println("2nd call user:" + user);
-		
-		//service0.createOrUpdateUser(user);
-		service2.addStudentToCourse(course, quan);
-		
-		quan.getStatuses().forEach(status ->{
-			System.out.println(status);
-		});
+//		service0.createOrUpdateUser(new User(
+//				"test",
+//				HashingUtil.passwordEncryption("test"),
+//				User.USER_ROLE.Role_Student.name(),
+//				true,
+//				null));
+//		
+//		User user = service0.findUserById(1);
+//		System.out.println("1st call user:" + user);
+//		Student quan = service4.createOrUpdateStudent(new Student(user, "Hoang Quan", "Tran", null, null));
+//		//user.setUserInformation(quan);
+//		
+//		user = service0.findUserById(1);
+//		System.out.println("2nd call user:" + user);
+//		
+//		//service0.createOrUpdateUser(user);
+//		service2.addStudentToCourse(course, quan);
+//		
+//		quan.getStatuses().forEach(status ->{
+//			System.out.println(status);
+//		});
 		
 //		Subject math = new Subject("MTH005", "test");
 //		Course dummy = new Course(math, null, null);
@@ -79,6 +76,16 @@ public class Main {
 //		for (SubjectWeek week: schedule.getSubjectWeeks()) {
 //			System.out.println(week.getSchedule().getCourse().getId());
 //		}
+		
+//		service0.createOrUpdateUser(new User(
+//				"test1",
+//				HashingUtil.passwordEncryption("test1"),
+//				User.USER_ROLE.Role_Student.name(),
+//				false,
+//				null));
+		
+		LoginController controller = new LoginController();
+		controller.start();
 	}
 
 }

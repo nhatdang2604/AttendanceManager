@@ -3,8 +3,8 @@ package com.nhatdang2604.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.nhatdang2604.model.crm.CRMUser;
 import com.nhatdang2604.model.entity.User;
+import com.nhatdang2604.model.formModel.LoginFormModel;
 import com.nhatdang2604.utility.HashingUtil;
 import com.nhatdang2604.utility.HibernateUtil;
 
@@ -25,7 +25,7 @@ public enum UserDAO implements IUserDAO {
 
 	//Return the User of the crmUser in the database
 	//If the user is existed, return the user, else return null
-	public User getUserByCRMUser(CRMUser crmUser) {
+	public User getUserByUserLoginModel(LoginFormModel crmUser) {
 
 		Session session = factory.getCurrentSession();
 		
