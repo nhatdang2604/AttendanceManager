@@ -6,13 +6,17 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.nhatdang2604.dao.CourseDAO;
-import com.nhatdang2604.dao.ICourseDAO;
+import com.nhatdang2604.dao.i.ICourseDAO;
 import com.nhatdang2604.model.entity.Course;
 import com.nhatdang2604.model.entity.Schedule;
 import com.nhatdang2604.model.entity.Student;
 import com.nhatdang2604.model.entity.StudentAttendanceStatus;
 import com.nhatdang2604.model.entity.Subject;
 import com.nhatdang2604.model.entity.SubjectWeek;
+import com.nhatdang2604.service.i.IAttendanceStatusService;
+import com.nhatdang2604.service.i.ICourseService;
+import com.nhatdang2604.service.i.IScheduleService;
+import com.nhatdang2604.service.i.IStudentService;
 
 public enum CourseService implements ICourseService {
 
@@ -85,7 +89,7 @@ public enum CourseService implements ICourseService {
 			student.add(course);
 		});
 		
-		studentService.createOrUpdateStudents(students);
+		studentService.updateStudents(students);
 		return updateCourse(course);
 	}
 
@@ -106,7 +110,7 @@ public enum CourseService implements ICourseService {
 		student.add(statuses);
 		
 		attendanceStatusService.createOrUpdateStatuses(statuses);
-		studentService.createOrUpdateStudent(student);
+		studentService.updateStudent(student);
 		
 		return updateCourse(course);
 	}

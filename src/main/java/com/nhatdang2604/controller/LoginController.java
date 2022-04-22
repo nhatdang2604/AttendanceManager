@@ -8,23 +8,34 @@ import javax.swing.JFrame;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.model.formModel.ChangePasswordFormModel;
 import com.nhatdang2604.model.formModel.LoginFormModel;
-import com.nhatdang2604.service.IUserService;
 import com.nhatdang2604.service.UserService;
-import com.nhatdang2604.view.form.BaseForm;
+import com.nhatdang2604.service.i.IUserService;
 import com.nhatdang2604.view.BaseView;
-import com.nhatdang2604.view.form.ChangePasswordForm;
-import com.nhatdang2604.view.form.LoginForm;
+import com.nhatdang2604.view.frame.BaseFrame;
+import com.nhatdang2604.view.frame.BaseMainFrame;
+import com.nhatdang2604.view.frame.MinistryMainFrame;
+import com.nhatdang2604.view.frame.StudentMainFrame;
+import com.nhatdang2604.view.frame.form.BaseForm;
+import com.nhatdang2604.view.frame.form.ChangePasswordForm;
+import com.nhatdang2604.view.frame.form.LoginForm;
 
 public class LoginController implements IController {
 
 	private BaseForm loginForm;
 	private BaseForm changePasswordForm;
-	private BaseView main;
+	private BaseFrame main;
 	
-	private BaseView currentFrame;
+	private BaseFrame currentFrame;
 	private IUserService userService;
 
 	private User currentUser;
+	
+	private static List<BaseMainFrame> MAIN_VIEWS = Arrays.asList(
+			new StudentMainFrame(),
+			new MinistryMainFrame());
+	
+	private static final int STUDENT_MAIN_VIEW_INDEX = 0;
+	private static final int MINISTRY_MAIN_VIEW_INDEX = 1;
 	
 	private List<Runnable> pathTransitionExecutions = Arrays.asList(
 		()->{							
@@ -46,6 +57,16 @@ public class LoginController implements IController {
 	private final int GOTO_CHANGE_PASSWORD_IDX = 1;
 	private final int GOTO_MAIN_IDX = 2;
 	
+	private BaseMainFrame getMainViewBaseOnRole(User user) {
+		if (user.getRole().equals(User.USER_ROLE.Role_Student.name())) {
+			return MAIN_VIEWS.get(STUDENT_MAIN_VIEW_INDEX);
+		}
+		else if (user.getRole().equals(User.USER_ROLE.Role_Ministry.name())) {
+			return MAIN_VIEWS.get(MINISTRY_MAIN_VIEW_INDEX);
+		}
+		
+		return null;
+	}
 	
 	public int initLogin() {
 		
@@ -61,6 +82,8 @@ public class LoginController implements IController {
 				
 				currentUser = user;
 				
+				//Set up the right main frame, base on role
+				main = getMainViewBaseOnRole(user);
 				
 				if (!user.getIsActive()){
 					
@@ -78,6 +101,7 @@ public class LoginController implements IController {
 		return 0;
 	}
 	
+	
 	public int initChangePassword() {
 		
 		changePasswordForm.getSubmitButton().addActionListener((event) -> {
@@ -92,6 +116,9 @@ public class LoginController implements IController {
 				String encryptedNewPassword = ((ChangePasswordFormModel) changePasswordForm.submit()).getEncryptedNewPassword();
 				userService.changePassword(user, encryptedNewPassword);
 				
+				//Set up the right main frame, base on role
+				main = getMainViewBaseOnRole(user);
+				
 				//Goto main frame
 				pathTransitionExecutions.get(GOTO_MAIN_IDX).run();
 			}
@@ -103,20 +130,14 @@ public class LoginController implements IController {
 		return 0;
 	}
 	
-	public int initMain() {
-		return 0;
-	}
-	
 	public LoginController() {
 		this.loginForm = new LoginForm();
 		this.changePasswordForm = new ChangePasswordForm();
-		this.main = new BaseView();
 		this.userService = UserService.INSTANCE;
 		this.currentFrame = loginForm;
 		
 		initLogin();
 		initChangePassword();
-		initMain();
 		
 	}
 

@@ -3,11 +3,13 @@ package com.nhatdang2604.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nhatdang2604.dao.IScheduleDAO;
 import com.nhatdang2604.dao.ScheduleDAO;
 import com.nhatdang2604.dao.SubjectWeekDAO;
+import com.nhatdang2604.dao.i.IScheduleDAO;
 import com.nhatdang2604.model.entity.Schedule;
 import com.nhatdang2604.model.entity.SubjectWeek;
+import com.nhatdang2604.service.i.IScheduleService;
+import com.nhatdang2604.service.i.ISubjectWeekService;
 
 public enum ScheduleService implements IScheduleService {
 	

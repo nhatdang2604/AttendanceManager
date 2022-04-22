@@ -2,9 +2,10 @@ package com.nhatdang2604.service;
 
 import java.util.List;
 
-import com.nhatdang2604.dao.ISubjectWeekDAO;
 import com.nhatdang2604.dao.SubjectWeekDAO;
+import com.nhatdang2604.dao.i.ISubjectWeekDAO;
 import com.nhatdang2604.model.entity.SubjectWeek;
+import com.nhatdang2604.service.i.ISubjectWeekService;
 
 public enum SubjectWeekService implements ISubjectWeekService {
 	

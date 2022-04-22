@@ -3,6 +3,7 @@ package com.nhatdang2604.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import com.nhatdang2604.dao.i.IMinistryDAO;
 import com.nhatdang2604.model.entity.Ministry;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.utility.HibernateUtil;

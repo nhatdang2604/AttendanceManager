@@ -1,25 +1,14 @@
 package com.nhatdang2604.main;
 
 import com.nhatdang2604.controller.LoginController;
-import com.nhatdang2604.model.entity.User;
-import com.nhatdang2604.service.CourseService;
-import com.nhatdang2604.service.ICourseService;
-import com.nhatdang2604.service.IStudentService;
-import com.nhatdang2604.service.ISubjectService;
-import com.nhatdang2604.service.IUserService;
-import com.nhatdang2604.service.StudentService;
-import com.nhatdang2604.service.SubjectService;
-import com.nhatdang2604.service.UserService;
-import com.nhatdang2604.utility.HashingUtil;
-
 
 public class Main {
 
 	public static void main(String[] args) {
-		IUserService service0 = UserService.INSTANCE;
-		ISubjectService service1 = SubjectService.INSTANCE;
-		ICourseService service2 = CourseService.INSTANCE;
-		IStudentService service4 = StudentService.INSTANCE;
+//		IUserService service0 = UserService.INSTANCE;
+//		ISubjectService service1 = SubjectService.INSTANCE;
+//		ICourseService service2 = CourseService.INSTANCE;
+//		IStudentService service4 = StudentService.INSTANCE;
 //		
 //		Subject math = new Subject("MTH0004", "Đại số tuyến tính");
 //		
@@ -59,7 +48,7 @@ public class Main {
 //		quan.getStatuses().forEach(status ->{
 //			System.out.println(status);
 //		});
-		
+//		
 //		Subject math = new Subject("MTH005", "test");
 //		Course dummy = new Course(math, null, null);
 //		dummy.setId(5);
@@ -76,16 +65,34 @@ public class Main {
 //		for (SubjectWeek week: schedule.getSubjectWeeks()) {
 //			System.out.println(week.getSchedule().getCourse().getId());
 //		}
-		
+//		
 //		service0.createOrUpdateUser(new User(
 //				"test1",
 //				HashingUtil.passwordEncryption("test1"),
 //				User.USER_ROLE.Role_Student.name(),
 //				false,
 //				null));
-		
+//		
+//		service0.createOrUpdateUser(new User(
+//				"admin0",
+//				HashingUtil.passwordEncryption("admin0"),
+//				User.USER_ROLE.Role_Ministry.name(),
+//				false,
+//				null));
+//		
+//		
 		LoginController controller = new LoginController();
 		controller.start();
+//		
+//		BaseMainFrame mainView = new MinistryMainFrame();
+//		mainView.open();
+//		
+		
+//		StudentForm form = new StudentForm();
+//		form.open();
+		
+//		BaseMainController miController = new MinistryMainController();
+//		miController.start();
 	}
 
 }

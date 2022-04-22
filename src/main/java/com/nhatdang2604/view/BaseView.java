@@ -1,9 +1,15 @@
 package com.nhatdang2604.view;
 
-import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class BaseView extends JFrame {
+public class BaseView extends JPanel implements ViewBehaviour {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5172795028647841915L;
+
+	@Override
 	public BaseView open() {
 		this.setVisible(true);
 		//this.pack();
@@ -11,6 +17,7 @@ public class BaseView extends JFrame {
 		return this;
 	}
 	
+	@Override
 	public void close() {
 		this.setVisible(false);
 	}

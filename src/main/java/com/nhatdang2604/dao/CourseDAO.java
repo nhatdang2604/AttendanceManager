@@ -4,6 +4,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import com.nhatdang2604.dao.i.ICourseDAO;
 import com.nhatdang2604.model.entity.Course;
 import com.nhatdang2604.utility.HibernateUtil;
 

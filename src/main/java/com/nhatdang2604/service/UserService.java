@@ -1,9 +1,10 @@
 package com.nhatdang2604.service;
 
-import com.nhatdang2604.dao.IUserDAO;
 import com.nhatdang2604.dao.UserDAO;
+import com.nhatdang2604.dao.i.IUserDAO;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.model.formModel.LoginFormModel;
+import com.nhatdang2604.service.i.IUserService;
 import com.nhatdang2604.utility.HashingUtil;
 
 public enum UserService implements IUserService {
@@ -50,14 +51,36 @@ public enum UserService implements IUserService {
 		
 		currentUser.setEncryptedPassword(newEncryptedPassword);
 		
-		return userDAO.createOrUpdateUser(currentUser);
+		return updateUser(currentUser);
 	}
 
 	@Override
-	public User createOrUpdateUser(User user) {
-		return userDAO.createOrUpdateUser(user);
+	public User createUser(User user) {
+		
+		//Insert dummy value for username and password
+		//	we gonna change username and password base on bussiness later
+		String dummyValue = "$dummy";
+		user.setUsername(dummyValue);
+		user.setEncryptedPassword(HashingUtil.passwordEncryption(dummyValue));
+		
+		//Create the user to get the id
+		user = userDAO.createUser(user);
+		
+		//Change default username and password base on id (bussiness)
+		Integer id = user.getId();
+		user.setUsername(id.toString());
+		user.setEncryptedPassword(HashingUtil.passwordEncryption(id.toString()));
+		user.setIsActive(false);
+		
+		//update the username and password
+		return updateUser(user);
 	}
 
+	@Override
+	public User updateUser(User user) {
+		return userDAO.updateUser(user);
+	}
+	
 	@Override
 	public Integer deleteUser(Integer id) {
 		return userDAO.deleteUser(id);

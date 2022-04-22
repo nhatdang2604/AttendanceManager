@@ -3,8 +3,9 @@ package com.nhatdang2604.service;
 import java.util.List;
 
 import com.nhatdang2604.dao.AttendanceStatusDAO;
-import com.nhatdang2604.dao.IAttendanceStatusDAO;
+import com.nhatdang2604.dao.i.IAttendanceStatusDAO;
 import com.nhatdang2604.model.entity.StudentAttendanceStatus;
+import com.nhatdang2604.service.i.IAttendanceStatusService;
 
 //Using enum for singleton pattern
 public enum AttendanceStatusService implements IAttendanceStatusService {

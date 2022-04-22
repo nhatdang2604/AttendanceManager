@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import com.nhatdang2604.dao.i.ISubjectWeekDAO;
 import com.nhatdang2604.model.entity.SubjectWeek;
 import com.nhatdang2604.utility.HibernateUtil;
 

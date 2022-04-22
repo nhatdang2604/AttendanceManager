@@ -3,6 +3,7 @@ package com.nhatdang2604.dao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import com.nhatdang2604.dao.i.IUserDAO;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.model.formModel.LoginFormModel;
 import com.nhatdang2604.utility.HashingUtil;
@@ -80,14 +81,15 @@ public enum UserDAO implements IUserDAO {
 		return user;
 	}
 	
-	public User createOrUpdateUser(User user) {
+	public User createUser(User user) {
 		
 		Session session = factory.getCurrentSession();
 		
 		try {
 			session.beginTransaction();
 			
-			session.saveOrUpdate(user);
+			Integer id = (Integer) session.save(user);
+			user = session.get(User.class, id);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -100,6 +102,26 @@ public enum UserDAO implements IUserDAO {
 		return user;
 	}
 
+	public User updateUser(User user) {
+		
+		Session session = factory.getCurrentSession();
+		
+		try {
+			session.beginTransaction();
+			
+			session.update(user);
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return user;
+	}
+	
 	public int deleteUser(Integer id) {
 		Session session = factory.getCurrentSession();
 		

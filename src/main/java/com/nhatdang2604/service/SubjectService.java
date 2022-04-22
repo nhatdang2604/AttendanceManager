@@ -2,9 +2,10 @@ package com.nhatdang2604.service;
 
 import org.hibernate.SessionFactory;
 
-import com.nhatdang2604.dao.ISubjectDAO;
 import com.nhatdang2604.dao.SubjectDAO;
+import com.nhatdang2604.dao.i.ISubjectDAO;
 import com.nhatdang2604.model.entity.Subject;
+import com.nhatdang2604.service.i.ISubjectService;
 
 public enum SubjectService implements ISubjectService {
 	
