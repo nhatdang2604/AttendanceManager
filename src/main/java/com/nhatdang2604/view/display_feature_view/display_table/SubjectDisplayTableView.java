@@ -6,18 +6,19 @@ import javax.swing.JPanel;
 
 import com.nhatdang2604.view.action.ChangeTabListener;
 import com.nhatdang2604.view.display_feature_view.table.StudentTableView;
+import com.nhatdang2604.view.display_feature_view.table.SubjectTableView;
 
 
-public class StudentDisplayTableView extends BaseDisplayTableView {
+public class SubjectDisplayTableView extends BaseDisplayTableView {
 
-	private StudentTableView view;
+	private SubjectTableView view;
 	
-	public StudentDisplayTableView(List<JPanel> backgroundParts) {
+	public SubjectDisplayTableView(List<JPanel> backgroundParts) {
 		super(backgroundParts);
 		
-		view = new StudentTableView();
+		view = new SubjectTableView();
 		
-		this.addTable(view.getTable(), "Sinh viên");
+		this.addTable(view.getTable(), "Môn học");
 		this.addDetail(view.getDetailView());
 		this.addHeader(view.getHeaderView());
 		
@@ -28,5 +29,5 @@ public class StudentDisplayTableView extends BaseDisplayTableView {
 		initOption();
 	}
 
-	public StudentTableView getStudentTableView() {return view;}
+	public SubjectTableView getSubjectTableView() {return view;}
 }

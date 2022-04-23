@@ -33,7 +33,7 @@ public class Subject implements Serializable {
 	
 	//Id for readablility
 	@Column(name = "course_id")
-	private String courseId;
+	private String subjectId;
 	
 	@Column(name = "name")
 	private String name;
@@ -47,20 +47,20 @@ public class Subject implements Serializable {
 		this.name = name;
 	}
 	
-	public Subject(String courseId, String name) {
-		this.courseId = courseId;
+	public Subject(String subjectId, String name) {
+		this.subjectId = subjectId;
 		this.name = name;
 	}
 	
 	//Getters
 	public Integer getId() {return id;}
-	public String getCourseId() {return courseId;}
+	public String getSubjectId() {return subjectId;}
 	public String getName() {return name;}
 
 	//Setters
 	public void setName(String name) {this.name = name;}
 	public void setId(Integer id) {this.id = id;}
-	public void setCourseId(String courseId) {this.courseId = courseId;}
+	public void setSubjectId(String subjectId) {this.subjectId = subjectId;}
 	
 	@Override
 	public String toString() {
