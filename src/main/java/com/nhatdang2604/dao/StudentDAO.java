@@ -194,6 +194,10 @@ public enum StudentDAO implements IStudentDAO {
 			session.beginTransaction();
 			students = session.createQuery("from " + Student.class.getName()).list();
 			
+			students.forEach(student -> {
+				Hibernate.initialize(student.getUser());
+			});
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			session.getTransaction().rollback();

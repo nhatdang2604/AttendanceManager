@@ -36,21 +36,15 @@ public enum CourseService implements ICourseService {
 
 	public Course createCourse(Course course) {
 		
-		Schedule schedule = course.getSchedule();
 		
-		//Add schedule if empty
-		if (null == schedule) {
-			schedule = new Schedule(course, null, null, null, null, null);
-			course.setSchedule(schedule);
-		}
 		
-		Course result = courseDAO.createOrUpdateCourse(course);
-		scheduleService.createOrUpdateSchedule(schedule);
-		return result;
+		course = courseDAO.createCourse(course);
+		//scheduleService.createOrUpdateSchedule(schedule);
+		return course;
 	}
 
 	public Course updateCourse(Course course) {
-		return courseDAO.createOrUpdateCourse(course);
+		return courseDAO.updateCourse(course);
 	}
 
 	public int deleteCourse(Integer id) {
@@ -113,5 +107,15 @@ public enum CourseService implements ICourseService {
 		studentService.updateStudent(student);
 		
 		return updateCourse(course);
+	}
+
+	@Override
+	public int deleteCourses(List<Integer> ids) {
+		return courseDAO.deleteCourses(ids);
+	}
+
+	@Override
+	public List<Course> getAllCourses() {
+		return courseDAO.getAllCourses();
 	}
 }

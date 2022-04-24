@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "student")
 @PrimaryKeyJoinColumn(foreignKey=@ForeignKey(name = "fk_student_base"))
-public class Student extends BaseUserRole {
+public class Student extends BaseUserRole implements Comparable{
 
 	/**
 	 * 
@@ -93,6 +93,19 @@ public class Student extends BaseUserRole {
 	public String toString() {
 		return "Student [getUser()=" + getUser() + ", getFirstName()=" + getFirstName() + ", getLastName()="
 				+ getLastName() + "]";
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		
+		if (null == arg0) return 1;
+		Student another = (Student) arg0;
+		
+		int result = 
+				(this.getId() > another.getId()?1:
+					(this.getId() < another.getId()? -1: 0));
+		
+		return result;
 	}
 	
 }

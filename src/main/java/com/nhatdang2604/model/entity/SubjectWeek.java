@@ -1,7 +1,7 @@
 package com.nhatdang2604.model.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,13 +40,13 @@ public class SubjectWeek implements Serializable {
 	private Integer weekIndex;	//From 1 - 15 weeks
 	
 	@Column(name = "date")
-	private Date date;
+	private LocalDate date;
 
 	public SubjectWeek() {
 		//do nothing
 	}
 	
-	public SubjectWeek(Schedule schedule, Integer weekIndex, Date date) {
+	public SubjectWeek(Schedule schedule, Integer weekIndex, LocalDate date) {
 		this.schedule = schedule;
 		this.weekIndex = weekIndex;
 		this.date = date;
@@ -68,11 +68,11 @@ public class SubjectWeek implements Serializable {
 		this.weekIndex = weekIndex;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

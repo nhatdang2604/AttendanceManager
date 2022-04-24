@@ -1,8 +1,8 @@
 package com.nhatdang2604.model.entity;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,9 +25,9 @@ public class Schedule implements Serializable {
 	 */
 	private static final long serialVersionUID = -7686434131173320183L;
 
-	public enum WEEK_DAY {
-		Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday
-	}
+	public static final String[] WEEK_DAYS = {
+			"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+	};
 	
 	
 	@Id
@@ -41,13 +41,13 @@ public class Schedule implements Serializable {
 	private List<SubjectWeek> subjectWeeks;
 	
 	@Column(name = "start_date")
-	private Date startDate;
+	private LocalDate startDate;
 	
 	@Column(name = "end_date")
-	private Date endDate;
+	private LocalDate endDate;
 	
 	@Column(name = "time")
-	private Time time;
+	private LocalTime time;
 	
 	@Column(name = "week_day")
 	private String weekDay;
@@ -57,7 +57,7 @@ public class Schedule implements Serializable {
 	}
 	
 	
-	public Schedule(Course course, List<SubjectWeek> subjectWeeks, Date startDate, Date endDate, Time time,
+	public Schedule(Course course, List<SubjectWeek> subjectWeeks, LocalDate startDate, LocalDate endDate, LocalTime time,
 			String weekDay) {
 		this.course = course;
 		this.subjectWeeks = subjectWeeks;
@@ -75,27 +75,27 @@ public class Schedule implements Serializable {
 		this.course = course;
 	}
 
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
-	public Time getTime() {
+	public LocalTime getTime() {
 		return time;
 	}
 
-	public void setTime(Time time) {
+	public void setTime(LocalTime time) {
 		this.time = time;
 	}
 
@@ -121,7 +121,7 @@ public class Schedule implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Schedule [course=" + course + ", startDate=" + startDate
+		return "Schedule [startDate=" + startDate
 				+ ", endDate=" + endDate + ", time=" + time + ", weekDay=" + weekDay + "]";
 	}
 

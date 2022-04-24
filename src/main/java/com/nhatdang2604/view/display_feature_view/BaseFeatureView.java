@@ -117,27 +117,4 @@ public class BaseFeatureView extends BaseView {
 	
 }
 
-//class DisplayFeaturePanel_Requirement1 extends BaseDisplayFeatureView {
-//	DisplayFeaturePanel_Requirement1() {
-//		super();
-//		
-//		parts.get(0).setLayout(new BorderLayout());
-//		parts.get(1).setLayout(new BorderLayout());
-//		parts.get(2).setLayout(new BorderLayout());
-//		
-//		DisplayTablesPanel test = new Requirement1Panel(parts);
-//		
-//		parts.get(0).setLayout(new BorderLayout());
-//		parts.get(0).add(test, BorderLayout.CENTER);
-//		
-//		parts.get(1).setLayout(new BorderLayout());
-//		parts.get(1).add(test.currentHeaderPanel(), BorderLayout.CENTER);
-//		
-//		parts.get(2).setLayout(new BorderLayout());
-//		parts.get(2).add(test.currentDetailInformationPanel(), BorderLayout.CENTER);
-//		
-//		test.currentDetailInformationPanel().setBackground(new Color(204, 204, 255));
-//		test.currentHeaderPanel().setBackground(UIManager.getColor("activeCaptionBorder"));	
-//	}
-//}
 

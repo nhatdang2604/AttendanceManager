@@ -5,20 +5,27 @@ import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 
+import com.nhatdang2604.model.entity.Course;
+import com.nhatdang2604.model.entity.Schedule;
 import com.nhatdang2604.model.entity.Student;
 import com.nhatdang2604.model.entity.Subject;
+import com.nhatdang2604.service.CourseService;
 import com.nhatdang2604.service.StudentService;
 import com.nhatdang2604.service.SubjectService;
+import com.nhatdang2604.service.i.ICourseService;
 import com.nhatdang2604.service.i.IStudentService;
 import com.nhatdang2604.service.i.ISubjectService;
 import com.nhatdang2604.view.display_feature_view.StudentFeatureView;
 import com.nhatdang2604.view.display_feature_view.SubjectFeatureView;
 import com.nhatdang2604.view.display_feature_view.detail.CRUD_DetailView;
+import com.nhatdang2604.view.display_feature_view.detail.CourseDetailView;
 import com.nhatdang2604.view.display_feature_view.display_table.StudentDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.SubjectDisplayTableView;
+import com.nhatdang2604.view.display_feature_view.table.CourseTableView;
 import com.nhatdang2604.view.display_feature_view.table.StudentTableView;
 import com.nhatdang2604.view.display_feature_view.table.SubjectTableView;
 import com.nhatdang2604.view.frame.MinistryMainFrame;
+import com.nhatdang2604.view.frame.form.CourseForm;
 import com.nhatdang2604.view.frame.form.StudentForm;
 import com.nhatdang2604.view.frame.form.SubjectForm;
 
@@ -26,11 +33,13 @@ public class MinistryMainController extends BaseMainController {
 
 	private IStudentService studentService;
 	private ISubjectService subjectService;
+	private ICourseService courseService;
 	
 	public MinistryMainController() {
 		super(new MinistryMainFrame());
 		studentService = StudentService.INSTANCE;
 		subjectService = SubjectService.INSTANCE;
+		courseService = CourseService.INSTANCE;
 	}
 
 	private void initUpdateOnStudentFeature(StudentTableView studentTableView) {
@@ -200,17 +209,110 @@ public class MinistryMainController extends BaseMainController {
 		});;
 	}
 	
+	private void initCreateOnCourseFeature(CourseTableView courseTableView) {
+		//TODO:
+		CourseDetailView detailView = (CourseDetailView) courseTableView.getDetailView();
+		detailView.getButtons().get(CRUD_DetailView.CREATE_BUTTON_INDEX).addActionListener((event) -> {
+			CourseForm createForm = new CourseForm(main);
+			
+			//Read all subject and student in database
+			createForm
+			.setAvailableSubjects(subjectService.getAllSubjects())
+			.getAddStudentForm()
+			.setStudentModels(studentService.getAllStudents())
+			.update();
+			
+			createForm.getSubmitButton().addActionListener((e) -> {
+				Course course = createForm.submit();
+				
+				//Mean the course id is existed => pop out error in the subject form
+				if (null == course.getSubject()) {
+					createForm.setError(0);
+				} else {
+					//TODO:
+					courseService.createCourse(course);
+					courseTableView.readData(courseService.getAllCourses()).update();
+					createForm.dispose();
+				}
+				
+			});
+			
+			//Open the create form
+			createForm.setVisible(true);
+		});;
+		
+	}
+	
+	private void initUpdateOnCourseFeature(CourseTableView courseTableView) {
+
+		//Make the update button activated
+		courseTableView.getUpdateButton().addActionListener((event) -> {
+							
+			Course updateCourse = courseTableView.getSelectedCourse();
+			CourseForm updateForm = new CourseForm(updateCourse, main);
+			
+			
+			//Check all the already registrated student into the form
+			// And add all student to choose
+			updateForm
+			.setAvailableSubjects(subjectService.getAllSubjects())
+			.getAddStudentForm()
+			.setStudentModels(studentService.getAllStudents())
+			.setCourseModel(updateCourse)
+			.update();
+			
+			//Parse the current subject week data into form
+			updateForm
+			.getWeekForm()
+			.setModel(updateCourse.getSchedule());
+			
+			//Save the current select row of the update course
+			int selectRowIndex = courseTableView.getSelectedRow();
+							
+			//When the form is filled => submit data by:
+			//	Update the subject data in backend
+			//	Update the subject data in frontend
+			updateForm.getSubmitButton().addActionListener((e) -> {
+				Course course = updateForm.submit();
+						
+				if (null == course.getSubject()) {
+					updateForm.setError(0);
+				} else {
+					course = courseService.updateCourse(course);
+					courseTableView.readData(courseService.getAllCourses()).update();
+					updateForm.dispose();
+							
+					//Keep selecting the current row
+					courseTableView.setRowSelectionInterval(selectRowIndex, selectRowIndex);
+				}
+						
+			});
+							
+			//Open the update form
+			updateForm.setVisible(true);
+		});		
+		
+	}
+	
 	private void initSubjectFeature() {
 		SubjectFeatureView subjectFeatureView = (SubjectFeatureView) main.getFeatureViews().get(MinistryMainFrame.SUBJECT_FEATURE_INDEX);
 		SubjectDisplayTableView subjectDisplayTableView = subjectFeatureView.getDisplayTableView();
+		
 		SubjectTableView subjectTableView = subjectDisplayTableView.getSubjectTableView();
+		CourseTableView courseTableView = subjectDisplayTableView.getCourseTableView();
 		
 		subjectTableView.readData(subjectService.getAllSubjects()).update();
-
+		courseTableView.readData(courseService.getAllCourses()).update();
+		
 		initCreateOnSubjectFeature(subjectTableView);
 		initUpdateOnSubjectFeature(subjectTableView);
 		initDeleteOnSubjectFeature(subjectTableView);
+		
+		initCreateOnCourseFeature(courseTableView);
+		initUpdateOnCourseFeature(courseTableView);
 	}
+	
+	
 	
 	@Override
 	public void start() {

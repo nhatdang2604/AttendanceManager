@@ -23,10 +23,13 @@ public class MappingFeatureActionListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		mapper.removeAll();
+		
 		mapper.setLayout(new BorderLayout());
 		mapper.add(mappee, BorderLayout.CENTER);
-		//featurePanels.get(index).repaint();
+		
+		mappee.repaint();
 		mapper.revalidate();
+		
 	}
 
 }
