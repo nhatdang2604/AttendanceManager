@@ -2,6 +2,7 @@ package com.nhatdang2604.model.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,7 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -42,6 +44,12 @@ public class SubjectWeek implements Serializable {
 	@Column(name = "date")
 	private LocalDate date;
 
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "subjectWeek",
+			orphanRemoval = true)
+	private List<StudentAttendanceStatus> attendanceStatuses;
+	
 	public SubjectWeek() {
 		//do nothing
 	}

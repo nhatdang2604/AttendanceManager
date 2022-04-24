@@ -184,7 +184,7 @@ public class MinistryMainController extends BaseMainController {
 		});
 	}
 	
-	private void initDeleteOnSubjectFeature(SubjectTableView subjectTableView) {
+	private void initDeleteOnSubjectFeature(SubjectTableView subjectTableView, CourseTableView courseTableView) {
 		
 		CRUD_DetailView detailView = (CRUD_DetailView) subjectTableView.getDetailView();
 		detailView.getButtons().get(CRUD_DetailView.DELETE_BUTTON_INDEX).addActionListener((event) -> {
@@ -203,6 +203,10 @@ public class MinistryMainController extends BaseMainController {
 				
 				subjectService.deleteSubjects(ids);
 				subjectTableView.readData(subjectService.getAllSubjects()).update();
+				
+				//Repopulate data for course view
+				courseTableView.readData(courseService.getAllCourses()).update();
+				
 				JOptionPane.showMessageDialog(null, "Đã xóa thành công.");
 			}
 	      
@@ -294,6 +298,32 @@ public class MinistryMainController extends BaseMainController {
 		
 	}
 	
+	private void initDeleteOnCourseFeature(CourseTableView courseTableView) {
+		CourseDetailView detailView = (CourseDetailView) courseTableView.getDetailView();
+		detailView.getButtons().get(CRUD_DetailView.DELETE_BUTTON_INDEX).addActionListener((event) -> {
+			
+			int input = JOptionPane.showConfirmDialog(null,
+	        		"Bạn có chắc chắn muốn xóa ?\nDữ liệu bị xóa sẽ không thể khôi phục lại được.",
+	        		"Xóa",
+	        		JOptionPane.YES_NO_OPTION);
+			
+			if (JOptionPane.YES_OPTION == input) {
+				List<Course> deletedCourses = courseTableView.getSelectedCourses();
+				List<Integer> ids = deletedCourses
+						.stream()
+						.map(course -> course.getId())
+						.collect(Collectors.toList());
+				
+				courseService.deleteCourses(ids);
+				courseTableView.readData(courseService.getAllCourses()).update();
+				
+				
+				JOptionPane.showMessageDialog(null, "Đã xóa thành công.");
+			}
+	      
+		});;
+	}
+	
 	private void initSubjectFeature() {
 		SubjectFeatureView subjectFeatureView = (SubjectFeatureView) main.getFeatureViews().get(MinistryMainFrame.SUBJECT_FEATURE_INDEX);
 		SubjectDisplayTableView subjectDisplayTableView = subjectFeatureView.getDisplayTableView();
@@ -306,10 +336,11 @@ public class MinistryMainController extends BaseMainController {
 		
 		initCreateOnSubjectFeature(subjectTableView);
 		initUpdateOnSubjectFeature(subjectTableView);
-		initDeleteOnSubjectFeature(subjectTableView);
+		initDeleteOnSubjectFeature(subjectTableView, courseTableView);
 		
 		initCreateOnCourseFeature(courseTableView);
 		initUpdateOnCourseFeature(courseTableView);
+		initDeleteOnCourseFeature(courseTableView);
 	}
 	
 	

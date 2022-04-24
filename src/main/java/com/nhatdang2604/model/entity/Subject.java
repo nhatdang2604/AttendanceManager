@@ -1,12 +1,15 @@
 package com.nhatdang2604.model.entity;
 
 import java.io.Serializable;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -38,6 +41,11 @@ public class Subject implements Serializable {
 	@Column(name = "name")
 	private String name;
 
+	@OneToMany(mappedBy = "subject", 
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<Course> courses;
+	
 	//Constructors
 	public Subject() {
 		//do nothing
@@ -56,11 +64,13 @@ public class Subject implements Serializable {
 	public Integer getId() {return id;}
 	public String getSubjectId() {return subjectId;}
 	public String getName() {return name;}
-
+	public List<Course> getCourses() {return courses;}
+	
 	//Setters
 	public void setName(String name) {this.name = name;}
 	public void setId(Integer id) {this.id = id;}
 	public void setSubjectId(String subjectId) {this.subjectId = subjectId;}
+	public void setCourses(List<Course> courses) {this.courses = courses;}
 	
 	@Override
 	public String toString() {

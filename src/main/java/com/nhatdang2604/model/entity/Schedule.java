@@ -37,7 +37,10 @@ public class Schedule implements Serializable {
 	@JoinColumn(name = "id")
 	private Course course;
 	
-	@OneToMany(mappedBy = "schedule")
+	@OneToMany(
+			cascade = CascadeType.ALL,
+			mappedBy = "schedule",
+			orphanRemoval = true)
 	private List<SubjectWeek> subjectWeeks;
 	
 	@Column(name = "start_date")

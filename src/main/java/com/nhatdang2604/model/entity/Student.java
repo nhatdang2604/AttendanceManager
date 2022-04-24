@@ -41,8 +41,11 @@ public class Student extends BaseUserRole implements Comparable{
 					CascadeType.MERGE,
 					CascadeType.DETACH,
 					CascadeType.REFRESH},
-			fetch = FetchType.LAZY,
-			mappedBy = "students")
+			fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "course_student",
+			joinColumns = @JoinColumn(name = "student_id"),
+			inverseJoinColumns = @JoinColumn(name = "course_id"))
 	private List<Course> courses;
 	
 	//Constructors

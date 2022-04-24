@@ -53,7 +53,7 @@ public class StudentAttendanceStatus implements Serializable {
 	private Student student;
 	
 	@Id
-	@OneToOne(
+	@ManyToOne(
 			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY)
 	@JoinColumns({

@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -31,8 +32,12 @@ public class Course implements Serializable {
 	@Column(name = "id")
 	private Integer id;
 	
-	@OneToOne(
-			cascade = CascadeType.ALL,
+	@ManyToOne(
+			cascade = {
+					CascadeType.PERSIST,
+					CascadeType.MERGE,
+					CascadeType.DETACH,
+					CascadeType.REFRESH},
 			fetch = FetchType.LAZY)
 	@JoinColumn(
 			name = "subject_id", 

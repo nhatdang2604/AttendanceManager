@@ -39,12 +39,14 @@ public enum CourseService implements ICourseService {
 		
 		
 		course = courseDAO.createCourse(course);
-		//scheduleService.createOrUpdateSchedule(schedule);
+		scheduleService.createOrUpdateSchedule(course.getSchedule());
 		return course;
 	}
 
 	public Course updateCourse(Course course) {
-		return courseDAO.updateCourse(course);
+		course = courseDAO.updateCourse(course);
+		scheduleService.createOrUpdateSchedule(course.getSchedule());
+		return course;
 	}
 
 	public int deleteCourse(Integer id) {
