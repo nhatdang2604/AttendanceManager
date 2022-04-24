@@ -54,34 +54,6 @@ public class CourseForm extends JDialog {
 	private List<Subject> availableSubjects;
 	private JLabel warningText;	
 	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		CourseForm form = new CourseForm();
-//		form.setError(0);
-//		form.setVisible(true);
-//		Student s1 = new Student(null, "Sử", "Nhật Đăng", null, null);
-//		s1.setId(1);
-//		Student s2 = new Student(null, "Trần", "Nhật Đăng", null, null);
-//		s2.setId(2);
-//		
-//		Set<Student> students = new TreeSet<>();
-//		students.add(s2);
-//		
-//		Course course = new Course();
-//		course.setStudents(students);
-//		course.setId(1);
-//		form.setModel(course);
-//		
-//		form.getAddStudentForm()
-//		.setStudentModels(Arrays.asList(s1, s2))
-//		.setCourseModel(course)
-//		.update();
-//		
-//		form.submit();
-//	}
-
 	public CourseForm setError(int errorCode) {
 		
 		//Login form only have warning type = 0: Wrong username or password

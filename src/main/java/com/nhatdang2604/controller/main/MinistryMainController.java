@@ -6,21 +6,26 @@ import java.util.stream.Collectors;
 import javax.swing.JOptionPane;
 
 import com.nhatdang2604.model.entity.Course;
-import com.nhatdang2604.model.entity.Schedule;
 import com.nhatdang2604.model.entity.Student;
 import com.nhatdang2604.model.entity.Subject;
+import com.nhatdang2604.service.AttendanceStatusService;
 import com.nhatdang2604.service.CourseService;
 import com.nhatdang2604.service.StudentService;
 import com.nhatdang2604.service.SubjectService;
+import com.nhatdang2604.service.i.IAttendanceStatusService;
 import com.nhatdang2604.service.i.ICourseService;
 import com.nhatdang2604.service.i.IStudentService;
 import com.nhatdang2604.service.i.ISubjectService;
+import com.nhatdang2604.view.display_feature_view.AttendanceFeatureView;
 import com.nhatdang2604.view.display_feature_view.StudentFeatureView;
 import com.nhatdang2604.view.display_feature_view.SubjectFeatureView;
+import com.nhatdang2604.view.display_feature_view.detail.AttendanceDetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CRUD_DetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CourseDetailView;
+import com.nhatdang2604.view.display_feature_view.display_table.AttendanceDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.StudentDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.SubjectDisplayTableView;
+import com.nhatdang2604.view.display_feature_view.table.AttendanceTableView;
 import com.nhatdang2604.view.display_feature_view.table.CourseTableView;
 import com.nhatdang2604.view.display_feature_view.table.StudentTableView;
 import com.nhatdang2604.view.display_feature_view.table.SubjectTableView;
@@ -34,12 +39,14 @@ public class MinistryMainController extends BaseMainController {
 	private IStudentService studentService;
 	private ISubjectService subjectService;
 	private ICourseService courseService;
+	private IAttendanceStatusService attendanceStatusService;
 	
 	public MinistryMainController() {
 		super(new MinistryMainFrame());
 		studentService = StudentService.INSTANCE;
 		subjectService = SubjectService.INSTANCE;
 		courseService = CourseService.INSTANCE;
+		attendanceStatusService = AttendanceStatusService.INSTANCE;
 	}
 
 	private void initUpdateOnStudentFeature(StudentTableView studentTableView) {
@@ -63,6 +70,7 @@ public class MinistryMainController extends BaseMainController {
 						
 				//Keep selecting the current row
 				studentTableView.setRowSelectionInterval(selectRowIndex, selectRowIndex);
+				updateAttendanceTable();
 			});
 					
 			//Open the update form
@@ -107,6 +115,7 @@ public class MinistryMainController extends BaseMainController {
 						.collect(Collectors.toList());
 				studentService.deleteStudents(ids);
 				studentTableView.readData(studentService.getAllStudents()).update();
+				updateAttendanceTable();
 				JOptionPane.showMessageDialog(null, "Đã xóa thành công.");
 			}
 	      
@@ -207,6 +216,7 @@ public class MinistryMainController extends BaseMainController {
 				//Repopulate data for course view
 				courseTableView.readData(courseService.getAllCourses()).update();
 				
+				updateAttendanceTable();
 				JOptionPane.showMessageDialog(null, "Đã xóa thành công.");
 			}
 	      
@@ -233,10 +243,11 @@ public class MinistryMainController extends BaseMainController {
 				if (null == course.getSubject()) {
 					createForm.setError(0);
 				} else {
-					//TODO:
+				
 					courseService.createCourse(course);
 					courseTableView.readData(courseService.getAllCourses()).update();
 					createForm.dispose();
+					updateAttendanceTable();
 				}
 				
 			});
@@ -288,6 +299,7 @@ public class MinistryMainController extends BaseMainController {
 							
 					//Keep selecting the current row
 					courseTableView.setRowSelectionInterval(selectRowIndex, selectRowIndex);
+					updateAttendanceTable();
 				}
 						
 			});
@@ -318,6 +330,7 @@ public class MinistryMainController extends BaseMainController {
 				courseTableView.readData(courseService.getAllCourses()).update();
 				
 				
+				updateAttendanceTable();
 				JOptionPane.showMessageDialog(null, "Đã xóa thành công.");
 			}
 	      
@@ -343,12 +356,48 @@ public class MinistryMainController extends BaseMainController {
 		initDeleteOnCourseFeature(courseTableView);
 	}
 	
+	private AttendanceTableView updateAttendanceTable() {
+		
+		//Rebuild the attendance UI
+		AttendanceTableView attendanceTableView = ((AttendanceFeatureView) main
+				.getFeatureViews()
+				.get(MinistryMainFrame.ATTENDANCE_FEATURE_INDEX))
+				.getDisplayTableView()
+				.getAttendanceTableView();
+		AttendanceDetailView attendanceDetailView = (AttendanceDetailView) attendanceTableView.getDetailView();
+		
+		attendanceDetailView.readCourses(courseService.getAllCourses());
+		Course course = attendanceDetailView.getSelectedCourse();
+		
+		if (null != course) {
+			course.setStudents(attendanceStatusService.getStatusForStudents(course.getStudents()));
+			attendanceTableView.readData(course).update();
+		}
+		
+		return attendanceTableView;
+	}
 	
+	private void initAttendanceFeature() {
+		
+		AttendanceTableView attendanceTableView = updateAttendanceTable();
+		AttendanceDetailView attendanceDetailView = (AttendanceDetailView) attendanceTableView.getDetailView();
+		
+		attendanceDetailView.getComboBox().addActionListener((event) -> {
+			Course course = attendanceDetailView.getSelectedCourse();
+			if (null != course) {
+				course.setStudents(attendanceStatusService.getStatusForStudents(course.getStudents()));
+			}
+			attendanceTableView.readData(course).update();
+		});
+		
+	
+	}
 	
 	@Override
 	public void start() {
 		initStudentFeature();
 		initSubjectFeature();
+		initAttendanceFeature();
 		main.open();
 	}
 }

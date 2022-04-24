@@ -196,6 +196,8 @@ public enum StudentDAO implements IStudentDAO {
 			
 			students.forEach(student -> {
 				Hibernate.initialize(student.getUser());
+				Hibernate.initialize(student.getStatuses());
+				Hibernate.initialize(student.getCourses());
 			});
 			
 		} catch (Exception ex) {

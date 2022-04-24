@@ -23,9 +23,12 @@ public class StudentAttendanceStatus implements Serializable {
 	 */
 	private static final long serialVersionUID = -7658272083900305023L;
 
-	public enum ATTENDANCE_STATUS {
-		None, Present, Absent
-	}
+	public static final int NONE_STATUS_INDEX = 0;
+	public static final int ABSENT_STATUS_INDEX = 1;
+	public static final int PRESENT_STATUS_INDEX = 2;
+	public static final String[] ATTENDANCE_STATUS = {
+			"", "Vắng", "Có mặt"
+	};
 	
 //	@Id
 //	@Column(name = "student_id")

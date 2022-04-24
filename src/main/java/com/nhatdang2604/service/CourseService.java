@@ -33,19 +33,62 @@ public enum CourseService implements ICourseService {
 		studentService = StudentService.INSTANCE;
 		attendanceStatusService = AttendanceStatusService.INSTANCE;
 	}
-
+	
+	
+	private void createAttendance(Student student, Course course) {
+		final int index = StudentAttendanceStatus.NONE_STATUS_INDEX;
+		List<StudentAttendanceStatus> statuses = course
+				.getSchedule()
+				.getSubjectWeeks()
+				.stream()
+				.map(week -> 
+				new StudentAttendanceStatus(
+						student, 
+						week, 
+						StudentAttendanceStatus.ATTENDANCE_STATUS[index]))
+				.collect(Collectors.toList());
+		student.add(statuses);
+	}
+	private void createAttendances(Course course) {
+		
+		final int index = StudentAttendanceStatus.NONE_STATUS_INDEX;
+		course.getStudents().forEach(student -> {
+			createAttendance(student, course);
+		});
+		
+	}
+	
+	private void updateAttendances(Course course) {
+		final int index = StudentAttendanceStatus.NONE_STATUS_INDEX;
+		course.getStudents().forEach(student -> {
+			
+			int size = student.getCourses().size();
+			for (int i = 0; i < size; ++i) {
+				if (!student.getCourses().get(i).getId().equals(course.getId())) {
+					createAttendance(student, course);
+				}
+			}
+		});
+		
+	}
+	
 	public Course createCourse(Course course) {
-		
-		
-		
+		createAttendances(course);
 		course = courseDAO.createCourse(course);
 		scheduleService.createOrUpdateSchedule(course.getSchedule());
+		course.getStudents().forEach(student -> {
+			attendanceStatusService.createOrUpdateStatuses(student.getStatuses());
+		});
 		return course;
 	}
 
 	public Course updateCourse(Course course) {
+		updateAttendances(course);
 		course = courseDAO.updateCourse(course);
 		scheduleService.createOrUpdateSchedule(course.getSchedule());
+		course.getStudents().forEach(student -> {
+			attendanceStatusService.createOrUpdateStatuses(student.getStatuses());
+		});
 		return course;
 	}
 
@@ -100,7 +143,7 @@ public enum CourseService implements ICourseService {
 		List<StudentAttendanceStatus> statuses = weeks
 				.stream()
 				.map(week -> new StudentAttendanceStatus(
-						student, week, StudentAttendanceStatus.ATTENDANCE_STATUS.None.name()))
+						student, week, StudentAttendanceStatus.ATTENDANCE_STATUS[StudentAttendanceStatus.NONE_STATUS_INDEX]))
 				.collect(Collectors.toList());
 		
 		student.add(statuses);

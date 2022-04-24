@@ -135,7 +135,7 @@ public class Course implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Course [id=" + id + ", subject=" + subject + ", students=" + students + "]";
+		return "Course [id=" + id + ", name=" + subject.getName() + "]";
 	}
 	
 	//Utitlity to add student to course

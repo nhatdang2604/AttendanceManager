@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.ScrollPaneConstants;
 
 import com.nhatdang2604.view.BaseView;
 import com.nhatdang2604.view.display_feature_view.detail.BaseDetailView;
@@ -78,7 +79,10 @@ public class BaseDisplayTableView extends JPanel {
 	
 	public void addTable(JTable table, String name) {
 		tables.add(table);
-		JScrollPane scroll = new JScrollPane(table);
+		JScrollPane scroll = new JScrollPane(
+				table,
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, 
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		tabbedPanel.addTab(name, scroll);
 	}
 	

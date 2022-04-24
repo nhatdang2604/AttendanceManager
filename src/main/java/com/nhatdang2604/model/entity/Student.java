@@ -26,11 +26,7 @@ public class Student extends BaseUserRole implements Comparable{
 
 	
 	@OneToMany(
-			cascade = {
-					CascadeType.PERSIST,
-					CascadeType.MERGE,
-					CascadeType.DETACH,
-					CascadeType.REFRESH},
+			cascade = CascadeType.ALL,
 			fetch = FetchType.LAZY,
 			mappedBy = "student")
 	private List<StudentAttendanceStatus> statuses;
