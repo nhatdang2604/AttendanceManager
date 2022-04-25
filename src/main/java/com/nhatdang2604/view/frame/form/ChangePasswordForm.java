@@ -136,7 +136,7 @@ public class ChangePasswordForm extends BaseForm {
 	
 	//Create and set properties of the change password form
 	private void initChangePasswordForm() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(100, 100, 450, 270);
 		this.setTitle("Đổi mật khẩu");
 		
@@ -201,5 +201,13 @@ public class ChangePasswordForm extends BaseForm {
 		}
 		
 		return true;
+	}
+	
+	@Override
+	public void clear() {
+		passtxtOldPassword.setText("");
+		passtxtNewPassword.setText("");
+		passtxtRetypeNewPassword.setText("");
+		jlbWarningText.setText("");
 	}
 }

@@ -104,4 +104,8 @@ CREATE TABLE `student_attendance_status`(
 	CONSTRAINT `fk_status_student` FOREIGN KEY(`student_id`)  REFERENCES student(`id`),
 	CONSTRAINT `fk_status_schedule` FOREIGN KEY(`schedule_id`) REFERENCES schedule(`id`),
 	PRIMARY KEY (`student_id`, `schedule_id`, `week_index`)
-)
+);
+
+INSERT INTO `user` VALUES(1, 'admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz/Eu4qB9vKrRIqRg=', 'Role_Ministry', true);
+INSERT INTO `base_user_role` VALUES(1, 'admin', 'admin');
+INSERT INTO `ministry` VALUES(1);

@@ -21,4 +21,14 @@ public abstract class BaseForm extends BaseFrame {
 	public boolean isValidForm() {
 		return false;
 	}
+	
+	public void clear() {
+		//do nothing
+	}
+	
+	@Override
+	public void close() {
+		clear();
+		super.close();
+	}
 }

@@ -1,6 +1,7 @@
 package com.nhatdang2604.view.frame;
 
 import com.nhatdang2604.view.display_feature_view.AttendanceFeatureView;
+import com.nhatdang2604.view.display_feature_view.BaseFeatureView;
 import com.nhatdang2604.view.display_feature_view.StudentFeatureView;
 import com.nhatdang2604.view.display_feature_view.SubjectFeatureView;
 import com.nhatdang2604.view.widget.Category;
@@ -20,10 +21,14 @@ public class MinistryMainFrame extends BaseMainFrame {
 		this.menuPanels.add(new Category("   Sinh viên  "));
 		this.menuPanels.add(new Category("    Môn học   "));
 		this.menuPanels.add(new Category("   Điểm danh  "));
+		this.menuPanels.add(changePasswordCategory);
+		this.menuPanels.add(logoutCategory);
 		
 		this.featureViews.add(new StudentFeatureView());
 		this.featureViews.add(new SubjectFeatureView());
 		this.featureViews.add(new AttendanceFeatureView());
+		this.featureViews.add(new BaseFeatureView());
+		this.featureViews.add(new BaseFeatureView());
 	}
 	
 	

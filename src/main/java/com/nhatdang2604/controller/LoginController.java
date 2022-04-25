@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.swing.JFrame;
 
+import com.nhatdang2604.controller.main.BaseMainController;
+import com.nhatdang2604.controller.main.MinistryMainController;
+import com.nhatdang2604.controller.main.StudentMainController;
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.model.formModel.ChangePasswordFormModel;
 import com.nhatdang2604.model.formModel.LoginFormModel;
 import com.nhatdang2604.service.UserService;
 import com.nhatdang2604.service.i.IUserService;
-import com.nhatdang2604.view.BaseView;
 import com.nhatdang2604.view.frame.BaseFrame;
 import com.nhatdang2604.view.frame.BaseMainFrame;
 import com.nhatdang2604.view.frame.MinistryMainFrame;
@@ -28,14 +30,9 @@ public class LoginController implements IController {
 	private BaseFrame currentFrame;
 	private IUserService userService;
 
+	private BaseMainController mainController;
+	
 	private User currentUser;
-	
-	private static List<BaseMainFrame> MAIN_VIEWS = Arrays.asList(
-			new StudentMainFrame(),
-			new MinistryMainFrame());
-	
-	private static final int STUDENT_MAIN_VIEW_INDEX = 0;
-	private static final int MINISTRY_MAIN_VIEW_INDEX = 1;
 	
 	private List<Runnable> pathTransitionExecutions = Arrays.asList(
 		()->{							
@@ -43,35 +40,51 @@ public class LoginController implements IController {
 			currentFrame = loginForm.open();},			//open login form
 		
 		()-> {
-			currentFrame.close();				//close current frame
+			loginForm.close();				//close current frame
 			currentFrame = changePasswordForm.open();	//open change password form
 		},
 		
 		()-> {
-			currentFrame.close();				//close current frame
-			currentFrame = main.open();				//open main frame
+			loginForm.close();				//close current frame
+			currentFrame = mainController.getCurrentWorkingFrame().open();	//open main frame
+		},
+		
+		()-> {
+			changePasswordForm.close();				//close current frame
+			mainController.getCurrentWorkingFrame().close();	//close main frame
+			loginForm.open();
 		}
 	);
 	
 	private final int GOTO_LOGIN_IDX = 0;
 	private final int GOTO_CHANGE_PASSWORD_IDX = 1;
-	private final int GOTO_MAIN_IDX = 2;
+	private final int GOTO_MAIN_IDX_FROM_LOGIN = 2;
+	private final int GOTO_MAIN_IDX_FROM_CHANGE_PASSWORD = 3;
+	
 	
 	private BaseMainFrame getMainViewBaseOnRole(User user) {
 		if (user.getRole().equals(User.USER_ROLE.Role_Student.name())) {
-			return MAIN_VIEWS.get(STUDENT_MAIN_VIEW_INDEX);
+			
+			mainController = new StudentMainController(
+					(LoginForm) loginForm,
+					(ChangePasswordForm) changePasswordForm,
+					user);
 		}
 		else if (user.getRole().equals(User.USER_ROLE.Role_Ministry.name())) {
-			return MAIN_VIEWS.get(MINISTRY_MAIN_VIEW_INDEX);
+			
+			mainController = new MinistryMainController(
+					(LoginForm) loginForm,
+					(ChangePasswordForm) changePasswordForm,
+					user);
 		}
 		
-		return null;
+		return mainController.getCurrentWorkingFrame();
 	}
 	
 	public int initLogin() {
 		
 		loginForm.getSubmitButton().addActionListener((event) -> {
-			final LoginFormModel model = (LoginFormModel) loginForm.submit();
+			LoginFormModel model = (LoginFormModel) loginForm.submit();
 			User user = userService.authenticated(model);
 			
 			if (null == user) {
@@ -81,6 +94,7 @@ public class LoginController implements IController {
 			} else {
 				
 				currentUser = user;
+				
 				
 				//Set up the right main frame, base on role
 				main = getMainViewBaseOnRole(user);
@@ -93,7 +107,7 @@ public class LoginController implements IController {
 				} else {
 					
 					//Else, goto main menu
-					pathTransitionExecutions.get(GOTO_MAIN_IDX).run();
+					pathTransitionExecutions.get(GOTO_MAIN_IDX_FROM_LOGIN).run();
 				}
 			}
 		});
@@ -120,7 +134,7 @@ public class LoginController implements IController {
 				main = getMainViewBaseOnRole(user);
 				
 				//Goto main frame
-				pathTransitionExecutions.get(GOTO_MAIN_IDX).run();
+				pathTransitionExecutions.get(GOTO_MAIN_IDX_FROM_CHANGE_PASSWORD).run();
 			}
 			
 			
@@ -131,6 +145,7 @@ public class LoginController implements IController {
 	}
 	
 	public LoginController() {
+		
 		this.loginForm = new LoginForm();
 		this.changePasswordForm = new ChangePasswordForm();
 		this.userService = UserService.INSTANCE;
@@ -147,7 +162,7 @@ public class LoginController implements IController {
 	}
 
 	@Override
-	public JFrame getCurrentWorkingFrame() {
+	public BaseFrame getCurrentWorkingFrame() {
 		return currentFrame;
 	}
 	

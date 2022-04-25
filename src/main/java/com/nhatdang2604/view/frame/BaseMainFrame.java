@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -21,6 +22,9 @@ public class BaseMainFrame extends BaseFrame {
 	protected JPanel leftPanel;
 	protected JPanel rightPanel;
 	
+	protected Category logoutCategory;
+	protected Category changePasswordCategory;
+	
 	protected List<BaseFeatureView> featureViews;
 	protected List<Category> menuPanels;
 	
@@ -32,6 +36,10 @@ public class BaseMainFrame extends BaseFrame {
 		rightPanel = new JPanel();
 		leftPanel = new JPanel();
 		basePanel = new JPanel();
+		
+		logoutCategory = new Category("Đăng xuất");
+		changePasswordCategory = new Category("Đổi mật khẩu");
+		
 		menuPanels = new ArrayList<Category>();
 		featureViews = new ArrayList<BaseFeatureView>();
 	}
@@ -116,9 +124,16 @@ public class BaseMainFrame extends BaseFrame {
 		//Activate the JFrame
         setContentPane(basePanel);
         setLocationRelativeTo(null);
+        
 	}
 	
+	public JButton getLogoutButton() {
+		return logoutCategory.getButton();
+	}
 	
+	public JButton getChangePasswordButton() {
+		return changePasswordCategory.getButton();
+	}
 	
 	public BaseMainFrame() {
 		initMainView();

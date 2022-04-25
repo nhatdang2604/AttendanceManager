@@ -1,7 +1,7 @@
 package com.nhatdang2604.main;
 
-import com.nhatdang2604.controller.main.BaseMainController;
-import com.nhatdang2604.controller.main.MinistryMainController;
+import com.nhatdang2604.controller.LoginController;
+import com.nhatdang2604.utility.HashingUtil;
 
 public class Main {
 
@@ -82,8 +82,8 @@ public class Main {
 //				null));
 //		
 //		
-//		LoginController controller = new LoginController();
-//		controller.start();
+		LoginController controller = new LoginController();
+		controller.start();
 //		
 //		BaseMainFrame mainView = new MinistryMainFrame();
 //		mainView.open();
@@ -92,14 +92,16 @@ public class Main {
 //		StudentForm form = new StudentForm();
 //		form.open();
 		
-		BaseMainController miController = new MinistryMainController();
-		miController.start();
+//		BaseMainController miController = new MinistryMainController();
+//		miController.start();
 		
 //		IStudentService ss = StudentService.INSTANCE;
 //		Student student = ss.findStudentById(1);
 //		
 //		StudentMainController miController = new StudentMainController();
 //		miController.setUser(student.getUser()).start();
+		
+//		System.out.println(HashingUtil.passwordEncryption("admin"));
 	}
 
 }

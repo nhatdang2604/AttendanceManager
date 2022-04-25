@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import com.nhatdang2604.model.entity.Course;
 import com.nhatdang2604.model.entity.Student;
 import com.nhatdang2604.model.entity.Subject;
+import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.service.AttendanceStatusService;
 import com.nhatdang2604.service.CourseService;
 import com.nhatdang2604.service.StudentService;
@@ -30,7 +31,9 @@ import com.nhatdang2604.view.display_feature_view.table.CourseTableView;
 import com.nhatdang2604.view.display_feature_view.table.StudentTableView;
 import com.nhatdang2604.view.display_feature_view.table.SubjectTableView;
 import com.nhatdang2604.view.frame.MinistryMainFrame;
+import com.nhatdang2604.view.frame.form.ChangePasswordForm;
 import com.nhatdang2604.view.frame.form.CourseForm;
+import com.nhatdang2604.view.frame.form.LoginForm;
 import com.nhatdang2604.view.frame.form.StudentForm;
 import com.nhatdang2604.view.frame.form.SubjectForm;
 
@@ -41,12 +44,16 @@ public class MinistryMainController extends BaseMainController {
 	private ICourseService courseService;
 	private IAttendanceStatusService attendanceStatusService;
 	
-	public MinistryMainController() {
-		super(new MinistryMainFrame());
+	public MinistryMainController(LoginForm loginForm, ChangePasswordForm changePasswordForm, User user) {
+		super(new MinistryMainFrame(), loginForm, changePasswordForm, user);
 		studentService = StudentService.INSTANCE;
 		subjectService = SubjectService.INSTANCE;
 		courseService = CourseService.INSTANCE;
 		attendanceStatusService = AttendanceStatusService.INSTANCE;
+		
+		initStudentFeature();
+		initSubjectFeature();
+		initAttendanceFeature();
 	}
 
 	private void initUpdateOnStudentFeature(StudentTableView studentTableView) {
@@ -404,9 +411,6 @@ public class MinistryMainController extends BaseMainController {
 	
 	@Override
 	public void start() {
-		initStudentFeature();
-		initSubjectFeature();
-		initAttendanceFeature();
 		main.open();
 	}
 }

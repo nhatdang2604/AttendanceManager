@@ -104,7 +104,7 @@ public class LoginForm extends BaseForm {
 	
 	//Create and set properties of the login form
 	private void initLoginForm() {
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBounds(10, 10, 370, 208);
 		this.setTitle("Đăng nhập");
 		contentPane = new JPanel();
@@ -138,6 +138,13 @@ public class LoginForm extends BaseForm {
 	@Override
 	public JButton getSubmitButton() {
 		return btnLogin;
+	}
+	
+	@Override
+	public void clear() {
+		txtUsername.setText("");
+		passtxtPassword.setText("");
+		jlbWarningText.setText("");
 	}
 	
 }

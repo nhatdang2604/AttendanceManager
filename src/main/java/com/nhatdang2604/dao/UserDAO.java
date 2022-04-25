@@ -44,10 +44,14 @@ public enum UserDAO implements IUserDAO {
 			
 			user = (User) session.createQuery(query)
 					.setParameter(param, crmUser.getUsername())
-					.getSingleResult();
+					.setMaxResults(1)
+					.stream()
+					.findFirst()
+					.orElse(null);
 			
-			Hibernate.initialize(user.getUserInformation());
-			
+			if (null != user) {
+				Hibernate.initialize(user.getUserInformation());
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			session.getTransaction().rollback();

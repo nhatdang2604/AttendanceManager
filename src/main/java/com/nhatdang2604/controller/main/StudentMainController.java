@@ -20,19 +20,20 @@ import com.nhatdang2604.view.display_feature_view.table.AttendanceForStudentTabl
 import com.nhatdang2604.view.display_feature_view.table.StudentAttendanceTableView;
 import com.nhatdang2604.view.display_feature_view.table.StudentTableView;
 import com.nhatdang2604.view.frame.StudentMainFrame;
+import com.nhatdang2604.view.frame.form.ChangePasswordForm;
+import com.nhatdang2604.view.frame.form.LoginForm;
 
 public class StudentMainController extends BaseMainController {
 
 	private IStudentService studentService;
-
 	private IAttendanceStatusService attendanceStatusService;
 	
-	private User currentUser;
-	
-	public StudentMainController() {
-		super(new StudentMainFrame());
+	public StudentMainController(LoginForm loginForm, ChangePasswordForm changePasswordForm, User user) {
+		super(new StudentMainFrame(), loginForm, changePasswordForm, user);
 		studentService = StudentService.INSTANCE;
 		attendanceStatusService = AttendanceStatusService.INSTANCE;
+		setupForUser();
+		initStudentAttendanceFeature();
 	}
 	
 	private void initStudentAttendanceFeature() {
@@ -42,7 +43,7 @@ public class StudentMainController extends BaseMainController {
 		
 		StudentAttendanceTableView studentAttendanceTableView = 
 				studentAttendanceDisplayTableView.getStudentAttendanceTableView();
-		studentAttendanceTableView.readData((Student) currentUser.getUserInformation()).update();
+		studentAttendanceTableView.readData((Student) user.getUserInformation()).update();
 		
 		
 		AttendanceForStudentTableView attendanceForStudentTableView = 
@@ -53,8 +54,8 @@ public class StudentMainController extends BaseMainController {
 	}
 	
 	private void updateCurrentUser() {
-		Student student = studentService.findStudentById(currentUser.getId());
-		currentUser = student.getUser();
+		Student student = studentService.findStudentById(user.getId());
+		user = student.getUser();
 	}
 	
 	private void initAttendingFeature(
@@ -64,7 +65,7 @@ public class StudentMainController extends BaseMainController {
 		AttendanceForStudentDetailView detailView = (AttendanceForStudentDetailView) tableView.getDetailView();
 		
 		detailView.getButtons().get(AttendanceForStudentDetailView.SEARCH_BUTTON_INDEX).addActionListener((event) -> {
-			Student student = (Student) currentUser.getUserInformation();
+			Student student = (Student) user.getUserInformation();
 			List<StudentAttendanceStatus> result = new ArrayList<>();
 			for (StudentAttendanceStatus status: student.getStatuses()) {
 				Schedule schedule = status.getSubjectWeek().getSchedule();
@@ -83,21 +84,26 @@ public class StudentMainController extends BaseMainController {
 			attendanceStatusService.createOrUpdateStatuses(result);
 			
 			updateCurrentUser();
-			studentAttendanceTableView.readData((Student) currentUser.getUserInformation()).update();
+			studentAttendanceTableView.readData((Student) user.getUserInformation()).update();
 		});
 
 	}
 	
-	public BaseMainController setUser(User user) {
-		this.currentUser = user;
-		updateCurrentUser();
-		
-		return this;
+//	public BaseMainController setUser(User user) {
+//		this.user = user;
+//		updateCurrentUser();
+//		
+//		return this;
+//	}
+	
+	private void setupForUser() {
+		Student student = (Student) user.getUserInformation();
+		student = studentService.findStudentById(student.getId());
+		user = student.getUser();
 	}
 	
 	@Override
 	public void start() {
-		initStudentAttendanceFeature();
 		main.open();
 	}
 }
