@@ -1,6 +1,7 @@
 package com.nhatdang2604.controller.main;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
@@ -22,7 +23,6 @@ import com.nhatdang2604.view.display_feature_view.SubjectFeatureView;
 import com.nhatdang2604.view.display_feature_view.detail.AttendanceDetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CRUD_DetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CourseDetailView;
-import com.nhatdang2604.view.display_feature_view.display_table.AttendanceDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.StudentDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.SubjectDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.table.AttendanceTableView;
@@ -390,7 +390,11 @@ public class MinistryMainController extends BaseMainController {
 			attendanceTableView.readData(course).update();
 		});
 		
-	
+		attendanceDetailView.getButtons().get(AttendanceDetailView.SAVE_BUTTON_INDEX).addActionListener(event -> {
+			Set<Student> students = attendanceTableView.getUpdatedStatusStudents();
+			studentService.updateStudents(students);
+			attendanceTableView.update();
+		});
 	}
 	
 	@Override

@@ -87,7 +87,8 @@ public enum CourseService implements ICourseService {
 		course = courseDAO.updateCourse(course);
 		scheduleService.createOrUpdateSchedule(course.getSchedule());
 		course.getStudents().forEach(student -> {
-			attendanceStatusService.createOrUpdateStatuses(student.getStatuses());
+			studentService.updateStudent(student);
+			//attendanceStatusService.createOrUpdateStatuses(student.getStatuses());
 		});
 		return course;
 	}

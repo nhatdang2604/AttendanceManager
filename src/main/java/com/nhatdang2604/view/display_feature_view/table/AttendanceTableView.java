@@ -53,7 +53,7 @@ public class AttendanceTableView extends JTable implements ITableViewBehaviour{
 		
 		
 		for (int i = 0; i < numberOfWeeks; ++i) {
-			columnNames[NON_STATUS_TYPE_COLUMN_COUNT + i] = ("W" + (i+1));
+			columnNames[NON_STATUS_TYPE_COLUMN_COUNT + i] = "W" + (i + 1);
 		}
 		
 		
@@ -114,7 +114,39 @@ public class AttendanceTableView extends JTable implements ITableViewBehaviour{
 									StudentAttendanceStatus.ATTENDANCE_STATUS)));
 		}
 	}
+	
+	public Set<Student> getUpdatedStatusStudents() {
 		
+		//Full scan the table to get all the selected courses
+		Set<Student> result = courseModel.getStudents();
+		int size = tableModel.getRowCount();
+		for (int i = 0; i < size; ++i) {
+			for(int j = 0; j < numberOfWeeks; ++j) {
+				String attendanceStatus = (String) tableModel.getValueAt(i, j + NON_STATUS_TYPE_COLUMN_COUNT);
+				//statusMatrix.get(i).get(j).setAttendanceStatus(attendanceStatus);
+				
+				for (Student student: result) {
+					List<StudentAttendanceStatus> statuses = student.getStatuses();
+					for (StudentAttendanceStatus status: statuses) {
+						
+						if (status.getSubjectWeek().getWeekIndex().equals(
+								statusMatrix.get(i).get(j).getSubjectWeek().getWeekIndex())
+							&&
+							status.getSubjectWeek().getSchedule().getCourse().getId().equals(
+									statusMatrix.get(i).get(j).getSubjectWeek().getSchedule().getCourse().getId())) {
+							
+							status.setAttendanceStatus(attendanceStatus);
+						}
+					}
+				}
+			}
+		}
+		
+		courseModel.setStudents(result);
+		return result;
+	}
+	
+	
 	public AttendanceTableView() {
 		
 		this.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

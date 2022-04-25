@@ -99,7 +99,7 @@ CREATE TABLE `student_attendance_status`(
 	`schedule_id` int(11) NOT NULL,
 	`week_index` int NOT NULL,
 	
-	`attendance_status` varchar(15) DEFAULT NULL,
+	`attendance_status` nvarchar(15) DEFAULT NULL,
 	
 	CONSTRAINT `fk_status_student` FOREIGN KEY(`student_id`)  REFERENCES student(`id`),
 	CONSTRAINT `fk_status_schedule` FOREIGN KEY(`schedule_id`) REFERENCES schedule(`id`),
