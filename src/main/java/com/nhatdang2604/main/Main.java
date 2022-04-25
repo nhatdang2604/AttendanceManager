@@ -94,6 +94,12 @@ public class Main {
 		
 		BaseMainController miController = new MinistryMainController();
 		miController.start();
+		
+//		IStudentService ss = StudentService.INSTANCE;
+//		Student student = ss.findStudentById(1);
+//		
+//		StudentMainController miController = new StudentMainController();
+//		miController.setUser(student.getUser()).start();
 	}
 
 }

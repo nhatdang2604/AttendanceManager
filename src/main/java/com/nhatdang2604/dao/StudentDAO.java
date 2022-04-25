@@ -51,7 +51,7 @@ public enum StudentDAO implements IStudentDAO {
 		try {
 			session.beginTransaction();
 			
-			session.update(student);
+			session.saveOrUpdate(student);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -173,6 +173,16 @@ public enum StudentDAO implements IStudentDAO {
 			session.beginTransaction();
 			
 			student = session.get(Student.class, id);
+			Hibernate.initialize(student.getUser());
+			Hibernate.initialize(student.getStatuses());
+			student.getStatuses().forEach(status -> {
+				Hibernate.initialize(status.getSubjectWeek());
+			});
+			Hibernate.initialize(student.getCourses());
+			student.getCourses().forEach(course -> {
+				Hibernate.initialize(course.getSubject());
+			});
+			
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -47,11 +47,10 @@ public enum CourseService implements ICourseService {
 						week, 
 						StudentAttendanceStatus.ATTENDANCE_STATUS[index]))
 				.collect(Collectors.toList());
+		
 		student.add(statuses);
 	}
 	private void createAttendances(Course course) {
-		
-		final int index = StudentAttendanceStatus.NONE_STATUS_INDEX;
 		course.getStudents().forEach(student -> {
 			createAttendance(student, course);
 		});
@@ -59,14 +58,19 @@ public enum CourseService implements ICourseService {
 	}
 	
 	private void updateAttendances(Course course) {
-		final int index = StudentAttendanceStatus.NONE_STATUS_INDEX;
 		course.getStudents().forEach(student -> {
 			
+			boolean isFound = false;
 			int size = student.getCourses().size();
 			for (int i = 0; i < size; ++i) {
-				if (!student.getCourses().get(i).getId().equals(course.getId())) {
-					createAttendance(student, course);
+				if (student.getCourses().get(i).getId().equals(course.getId())) {
+					isFound = true;
+					break;
 				}
+			}
+			
+			if (!isFound) {
+				createAttendance(student, course);
 			}
 		});
 		
@@ -85,7 +89,7 @@ public enum CourseService implements ICourseService {
 	public Course updateCourse(Course course) {
 		updateAttendances(course);
 		course = courseDAO.updateCourse(course);
-		scheduleService.createOrUpdateSchedule(course.getSchedule());
+//		scheduleService.createOrUpdateSchedule(course.getSchedule());
 		course.getStudents().forEach(student -> {
 			studentService.updateStudent(student);
 			//attendanceStatusService.createOrUpdateStatuses(student.getStatuses());

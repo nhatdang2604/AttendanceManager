@@ -106,31 +106,5 @@ public class StudentAttendanceStatus implements Serializable {
 		return "StudentAttendanceStatus [student=" + student + ", subjectWeek=" + subjectWeek + ", attendanceStatus="
 				+ attendanceStatus + "]";
 	}
-
-//	public Integer getStudentId() {
-//		return studentId;
-//	}
-//
-//	public void setStudentId(Integer studentId) {
-//		this.studentId = studentId;
-//	}
-//
-//	public Integer getScheduleId() {
-//		return scheduleId;
-//	}
-//
-//	public void setScheduleId(Integer scheduleId) {
-//		this.scheduleId = scheduleId;
-//	}
-//
-//	public Integer getWeekIndex() {
-//		return weekIndex;
-//	}
-//
-//	public void setWeekIndex(Integer weekIndex) {
-//		this.weekIndex = weekIndex;
-//	}
-//	
-	
 	
 }

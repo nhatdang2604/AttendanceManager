@@ -293,13 +293,18 @@ public class MinistryMainController extends BaseMainController {
 				if (null == course.getSubject()) {
 					updateForm.setError(0);
 				} else {
-					course = courseService.updateCourse(course);
-					courseTableView.readData(courseService.getAllCourses()).update();
-					updateForm.dispose();
-							
-					//Keep selecting the current row
-					courseTableView.setRowSelectionInterval(selectRowIndex, selectRowIndex);
-					updateAttendanceTable();
+					try {
+						course = courseService.updateCourse(course);
+					} catch (Exception ex) {
+						//do nothing
+					} finally {
+						courseTableView.readData(courseService.getAllCourses()).update();
+						updateForm.dispose();
+								
+						//Keep selecting the current row
+						courseTableView.setRowSelectionInterval(selectRowIndex, selectRowIndex);
+						updateAttendanceTable();
+					}
 				}
 						
 			});

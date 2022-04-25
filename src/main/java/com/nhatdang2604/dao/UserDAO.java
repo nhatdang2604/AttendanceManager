@@ -1,5 +1,6 @@
 package com.nhatdang2604.dao;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
@@ -44,7 +45,8 @@ public enum UserDAO implements IUserDAO {
 			user = (User) session.createQuery(query)
 					.setParameter(param, crmUser.getUsername())
 					.getSingleResult();
-
+			
+			Hibernate.initialize(user.getUserInformation());
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
