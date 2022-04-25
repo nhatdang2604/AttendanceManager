@@ -100,31 +100,57 @@ public class AttendanceTableView extends JTable implements ITableViewBehaviour{
 		//Full scan the table to get all the selected courses
 		Set<Student> result = courseModel.getStudents();
 		
-		int size = tableModel.getRowCount();
-		for (int i = 0; i < size; ++i) {
-			for(int j = 0; j < numberOfWeeks; ++j) {
+		int i = -1;
+		for  (Student student: result) {
+			++i;
+			List<StudentAttendanceStatus> statuses = student.getStatuses();
+			
+			for (int j = 0; j < numberOfWeeks; ++j) {
 				String attendanceStatus = (String) tableModel.getValueAt(i, j + NON_STATUS_TYPE_COLUMN_COUNT);
-				//statusMatrix.get(i).get(j).setAttendanceStatus(attendanceStatus);
 				
-				for (Student student: result) {
-					List<StudentAttendanceStatus> statuses = student.getStatuses();
-					for (StudentAttendanceStatus status: statuses) {
+				for(StudentAttendanceStatus status: statuses) {
+					
+					Integer mapperWeekIdx = statusMatrix.get(i).get(j).getSubjectWeek().getWeekIndex();
+					Integer mappeeWeekIdx = status.getSubjectWeek().getWeekIndex();
+					
+					Integer mapperCourseId = statusMatrix.get(i).get(j).getSubjectWeek().getSchedule().getCourse().getId();
+					Integer mappeeCourseId = status.getSubjectWeek().getSchedule().getCourse().getId();
+					
+					if (mapperWeekIdx.equals(mappeeWeekIdx) &&
+						mapperCourseId.equals(mappeeCourseId)) {
 						
-						Integer mapperWeekIdx = statusMatrix.get(i).get(j).getSubjectWeek().getWeekIndex();
-						Integer mappeeWeekIdx = status.getSubjectWeek().getWeekIndex();
-						
-						Integer mapperCourseId = statusMatrix.get(i).get(j).getSubjectWeek().getSchedule().getCourse().getId();
-						Integer mappeeCourseId = status.getSubjectWeek().getSchedule().getCourse().getId();
-						
-						if (mapperWeekIdx.equals(mappeeWeekIdx) &&
-							mapperCourseId.equals(mappeeCourseId)) {
-							
-							status.setAttendanceStatus(attendanceStatus);
-						}
+						status.setAttendanceStatus(attendanceStatus);
 					}
 				}
+				
 			}
 		}
+		
+//		int size = tableModel.getRowCount();
+//		for (int i = 0; i < size; ++i) {
+//			for(int j = 0; j < numberOfWeeks; ++j) {
+//				String attendanceStatus = (String) tableModel.getValueAt(i, j + NON_STATUS_TYPE_COLUMN_COUNT);
+//				//statusMatrix.get(i).get(j).setAttendanceStatus(attendanceStatus);
+//				
+//				for (Student student: result) {
+//					List<StudentAttendanceStatus> statuses = student.getStatuses();
+//					for (StudentAttendanceStatus status: statuses) {
+//						
+//						Integer mapperWeekIdx = statusMatrix.get(i).get(j).getSubjectWeek().getWeekIndex();
+//						Integer mappeeWeekIdx = status.getSubjectWeek().getWeekIndex();
+//						
+//						Integer mapperCourseId = statusMatrix.get(i).get(j).getSubjectWeek().getSchedule().getCourse().getId();
+//						Integer mappeeCourseId = status.getSubjectWeek().getSchedule().getCourse().getId();
+//						
+//						if (mapperWeekIdx.equals(mappeeWeekIdx) &&
+//							mapperCourseId.equals(mappeeCourseId)) {
+//							
+//							status.setAttendanceStatus(attendanceStatus);
+//						}
+//					}
+//				}
+//			}
+//		}
 		
 		courseModel.setStudents(result);
 		return result;
@@ -183,8 +209,15 @@ public class AttendanceTableView extends JTable implements ITableViewBehaviour{
 						.getCourse()
 						.getId()
 						.equals(courseModel.getId()))
+					.sorted((s1, s2) -> 
+						s1.getSubjectWeek().getWeekIndex().compareTo(
+								s2.getSubjectWeek().getWeekIndex())
+					)
 					.collect(Collectors.toList());
 			
+			statuses.forEach(st -> {
+				System.out.println(st.getSubjectWeek().getWeekIndex());
+			});
 			statusMatrix.add(statuses);
 			if (null != statuses && statuses.size() > 0) {
 				for (int i = 0; i  < numberOfWeeks; ++i) {
