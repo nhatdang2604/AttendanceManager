@@ -9,7 +9,7 @@ public interface IStudentService {
 
 	public Student createStudent(Student student);
 	public Student updateStudent(Student student);
-	public Collection<Student> createStudents(Collection<Student> students);
+	public List<Student> createStudents(List<Student> students);
 	public Collection<Student> updateStudents(Collection<Student> students);
 	public int deleteStudent(Integer id);
 	public int deleteStudents(List<Integer> ids);

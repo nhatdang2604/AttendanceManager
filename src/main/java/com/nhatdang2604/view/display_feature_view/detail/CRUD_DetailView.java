@@ -13,7 +13,7 @@ public class CRUD_DetailView extends BaseDetailView {
 	public static final int CREATE_BUTTON_INDEX = 0;
 	public static final int DELETE_BUTTON_INDEX = 1;
 	
-	private void makeButtons() {
+	protected void makeButtons() {
 		
 		//Create buttons
 		buttons = new ArrayList<>();

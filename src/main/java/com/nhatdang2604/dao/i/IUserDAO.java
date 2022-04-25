@@ -1,5 +1,7 @@
 package com.nhatdang2604.dao.i;
 
+import java.util.List;
+
 import com.nhatdang2604.model.entity.User;
 import com.nhatdang2604.model.formModel.LoginFormModel;
 
@@ -17,4 +19,8 @@ public interface IUserDAO {
 	public User updateUser(User user);
 	
 	public int deleteUser(Integer id);
+
+	public List<User> createUsers(List<User> users);
+
+	public List<User> updateUsers(List<User> users);
 }

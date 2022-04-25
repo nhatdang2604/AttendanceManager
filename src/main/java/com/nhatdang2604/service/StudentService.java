@@ -1,5 +1,6 @@
 package com.nhatdang2604.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,13 +23,21 @@ public enum StudentService implements IStudentService {
 		userService = UserService.INSTANCE;
 	}
 
-	@Override
-	public Student createStudent(Student student) {
+	private Student makeUserForStudent(Student student) {
 		
 		//Create user for the student
 		User user = new User();
 		user.setRole(User.USER_ROLE.Role_Student.name());
 		student.setUser(userService.createUser(user));
+		
+		return student;
+	}
+	
+	@Override
+	public Student createStudent(Student student) {
+		
+		//Create user for the student
+		student = makeUserForStudent(student);
 		
 		return studentDAO.createStudent(student);
 	}
@@ -39,8 +48,18 @@ public enum StudentService implements IStudentService {
 	}
 	
 	@Override
-	public Collection<Student> createStudents(Collection<Student> students) {
+	public List<Student> createStudents(List<Student> students) {
 		
+		List<User> users = new ArrayList<>();
+		int size = students.size();
+		for (int i = 0; i < size; ++i) {
+			User user = new User();
+			user.setRole(User.USER_ROLE.Role_Student.name());
+			students.get(i).setUser(user);
+			users.add(user);
+		}
+		
+		users = userService.createUsers(users);
 		return studentDAO.createStudents(students);
 	}
 

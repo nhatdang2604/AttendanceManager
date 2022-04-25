@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import com.nhatdang2604.model.entity.Course;
@@ -18,12 +19,15 @@ import com.nhatdang2604.service.i.IAttendanceStatusService;
 import com.nhatdang2604.service.i.ICourseService;
 import com.nhatdang2604.service.i.IStudentService;
 import com.nhatdang2604.service.i.ISubjectService;
+import com.nhatdang2604.utility.DataWriter;
+import com.nhatdang2604.utility.Parser;
 import com.nhatdang2604.view.display_feature_view.AttendanceFeatureView;
 import com.nhatdang2604.view.display_feature_view.StudentFeatureView;
 import com.nhatdang2604.view.display_feature_view.SubjectFeatureView;
 import com.nhatdang2604.view.display_feature_view.detail.AttendanceDetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CRUD_DetailView;
 import com.nhatdang2604.view.display_feature_view.detail.CourseDetailView;
+import com.nhatdang2604.view.display_feature_view.detail.StudentDetailView;
 import com.nhatdang2604.view.display_feature_view.display_table.StudentDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.display_table.SubjectDisplayTableView;
 import com.nhatdang2604.view.display_feature_view.table.AttendanceTableView;
@@ -130,6 +134,40 @@ public class MinistryMainController extends BaseMainController {
 		
 	}
 	
+	private void initCreateTemplateOnStudentFeature(StudentTableView studentTableView) {
+		
+		StudentDetailView detailView = (StudentDetailView) studentTableView.getDetailView();
+		detailView.getButtons().get(StudentDetailView.CREATE_TEMPLATE_INDEX).addActionListener((event) -> {
+			int state = detailView.getFileChooser().showSaveDialog(null);
+			if (JFileChooser.APPROVE_OPTION == state) {
+				
+				String ext = ".csv";
+				String path = detailView.getFileChooser().getSelectedFile().getAbsolutePath();
+				if (!path.endsWith(ext)) {
+					path += ext;
+				}
+				
+				DataWriter writer = new DataWriter();
+				writer.generateTemplate(path);
+			}
+		});
+	}
+	
+	private void initImportOnStudentFeature(StudentTableView studentTableView) {
+		
+		StudentDetailView detailView = (StudentDetailView) studentTableView.getDetailView();
+		detailView.getButtons().get(StudentDetailView.IMPORT_INDEX).addActionListener((event) -> {
+			int state = detailView.getFileChooser().showSaveDialog(null);
+			if (JFileChooser.APPROVE_OPTION == state) {
+				String path = detailView.getFileChooser().getSelectedFile().getAbsolutePath();
+				Parser parser = new Parser();
+				List<Student> students = parser.readStudentFromText(path);
+				studentService.createStudents(students);
+				studentTableView.readData(studentService.getAllStudents()).update();
+			}
+		});
+	}
+	
 	private void initStudentFeature() {
 		StudentFeatureView studentFeatureView = (StudentFeatureView) main.getFeatureViews().get(MinistryMainFrame.STUDENT_FEATURE_INDEX);
 		StudentDisplayTableView studentDisplayTableView = studentFeatureView.getDisplayTableView();
@@ -141,6 +179,8 @@ public class MinistryMainController extends BaseMainController {
 		initUpdateOnStudentFeature(studentTableView);
 		initDeleteOnStudentFeature(studentTableView);
 		
+		initCreateTemplateOnStudentFeature(studentTableView);
+		initImportOnStudentFeature(studentTableView);
 	}
 	
 	private void initCreateOnSubjectFeature(SubjectTableView subjectTableView) {

@@ -23,6 +23,7 @@ public class BaseMainController implements IController {
 	protected void setupChangePasswordButton() {
 		changePasswordForm.setUser(user);
 		main.getChangePasswordButton().addActionListener(event -> {
+			main.close();
 			changePasswordForm.open();
 		});
 	}

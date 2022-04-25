@@ -66,7 +66,7 @@ public enum StudentDAO implements IStudentDAO {
 	}
 	
 	@Override
-	public Collection<Student> createStudents(Collection<Student> students) {
+	public List<Student> createStudents(List<Student> students) {
 		Session session = factory.getCurrentSession();
 		
 		try {

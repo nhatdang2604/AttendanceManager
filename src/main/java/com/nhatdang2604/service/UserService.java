@@ -1,5 +1,7 @@
 package com.nhatdang2604.service;
 
+import java.util.List;
+
 import com.nhatdang2604.dao.UserDAO;
 import com.nhatdang2604.dao.i.IUserDAO;
 import com.nhatdang2604.model.entity.User;
@@ -54,23 +56,33 @@ public enum UserService implements IUserService {
 		return updateUser(currentUser);
 	}
 
+	private User setDummyValueForUser(User user, int index) {
+		String dummyValue = "$dummy" + index;
+		user.setUsername(dummyValue);
+		user.setEncryptedPassword(HashingUtil.passwordEncryption(dummyValue));
+		return user;
+	}
+	
+	private User setIdAsDefaultPassword(User user) {
+		Integer id = user.getId();
+		user.setUsername(id.toString());
+		user.setEncryptedPassword(HashingUtil.passwordEncryption(id.toString()));
+		user.setIsActive(false);
+		return user;
+	}
+	
 	@Override
 	public User createUser(User user) {
 		
 		//Insert dummy value for username and password
 		//	we gonna change username and password base on bussiness later
-		String dummyValue = "$dummy";
-		user.setUsername(dummyValue);
-		user.setEncryptedPassword(HashingUtil.passwordEncryption(dummyValue));
+		user = setDummyValueForUser(user, 0);
 		
 		//Create the user to get the id
 		user = userDAO.createUser(user);
 		
 		//Change default username and password base on id (bussiness)
-		Integer id = user.getId();
-		user.setUsername(id.toString());
-		user.setEncryptedPassword(HashingUtil.passwordEncryption(id.toString()));
-		user.setIsActive(false);
+		user = setIdAsDefaultPassword(user);
 		
 		//update the username and password
 		return updateUser(user);
@@ -89,6 +101,28 @@ public enum UserService implements IUserService {
 	@Override
 	public User findUserById(Integer id) {
 		return userDAO.findUserById(id);
+	}
+
+	@Override
+	public List<User> createUsers(List<User> users) {
+		
+		int size = users.size();
+		for (int i = 0; i < size; ++i) {
+			users.set(i, setDummyValueForUser(users.get(i), i));
+		}
+		
+		users = userDAO.createUsers(users);
+		
+		for (int i = 0; i < size; ++i) {
+			users.set(i, setIdAsDefaultPassword(users.get(i)));
+		}
+		
+		return updateUsers(users);
+	}
+	
+	@Override
+	public List<User> updateUsers(List<User> users)  {
+		return userDAO.updateUsers(users);
 	}
 	
 	

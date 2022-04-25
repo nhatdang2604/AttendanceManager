@@ -9,7 +9,7 @@ public interface IStudentDAO {
 
 	public Student createStudent(Student student);
 	public Student updateStudent(Student student);
-	public Collection<Student> createStudents(Collection<Student> students);
+	public List<Student> createStudents(List<Student> students);
 	public int deleteStudent(Integer id);
 	public int deleteStudents(List<Integer> ids);
 	public Student findStudentById(Integer id);

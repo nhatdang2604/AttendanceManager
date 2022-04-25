@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -12,13 +11,9 @@ import javax.swing.table.TableColumn;
 
 import com.nhatdang2604.model.entity.Student;
 import com.nhatdang2604.view.display_feature_view.detail.BaseDetailView;
-import com.nhatdang2604.view.display_feature_view.detail.CRUD_DetailView;
-import com.nhatdang2604.view.frame.form.BaseForm;
-import com.nhatdang2604.view.frame.form.LoginForm;
+import com.nhatdang2604.view.display_feature_view.detail.StudentDetailView;
 import com.nhatdang2604.view.widget.ButtonEditor;
 import com.nhatdang2604.view.widget.ButtonRenderer;
-import com.nhatdang2604.view.widget.CheckBoxEditor;
-import com.nhatdang2604.view.widget.CheckBoxRenderer;
 
 public class StudentTableView extends JTable implements ITableViewBehaviour{
 
@@ -102,7 +97,7 @@ public class StudentTableView extends JTable implements ITableViewBehaviour{
 		initUpdateButton();
 		
 		
-		detailView = new CRUD_DetailView("Sinh viên", null) ;
+		detailView = new StudentDetailView();
 		
 		//Dummy header: nothing in header
 		headerView = new JPanel();

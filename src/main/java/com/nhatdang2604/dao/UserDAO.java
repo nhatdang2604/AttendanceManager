@@ -1,5 +1,7 @@
 package com.nhatdang2604.dao;
 
+import java.util.List;
+
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -150,6 +152,56 @@ public enum UserDAO implements IUserDAO {
 		}
 	
 		return 0;
+	}
+
+	@Override
+	public List<User> createUsers(List<User> users) {
+		
+		Session session = factory.getCurrentSession();
+		
+		try {
+			session.beginTransaction();
+			
+			users.forEach(user -> {
+				Integer id = (Integer) session.save(user);
+				user.setId(id);
+			});
+			
+		} catch (Exception ex) {
+			
+			ex.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+	
+		
+		return users;
+	}
+
+	@Override
+	public List<User> updateUsers(List<User> users) {
+		
+		Session session = factory.getCurrentSession();
+		
+		try {
+			session.beginTransaction();
+			
+			users.forEach(user -> {
+				session.update(user);
+			});
+			
+		} catch (Exception ex) {
+			
+			ex.printStackTrace();
+			session.getTransaction().rollback();
+		} finally {
+			session.getTransaction().commit();
+			session.close();
+		}
+		
+		return users;
 	}
 	
 }
